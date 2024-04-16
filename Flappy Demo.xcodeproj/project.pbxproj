@@ -8,25 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		22F2C7032BCED02B007CFAA7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2C7022BCED02B007CFAA7 /* AppDelegate.swift */; };
-		22F2C7052BCED02B007CFAA7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 22F2C7042BCED02B007CFAA7 /* GameScene.sks */; };
-		22F2C7072BCED02B007CFAA7 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 22F2C7062BCED02B007CFAA7 /* Actions.sks */; };
 		22F2C7092BCED02B007CFAA7 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2C7082BCED02B007CFAA7 /* GameScene.swift */; };
 		22F2C70B2BCED02B007CFAA7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2C70A2BCED02B007CFAA7 /* GameViewController.swift */; };
 		22F2C70E2BCED02B007CFAA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22F2C70C2BCED02B007CFAA7 /* Main.storyboard */; };
 		22F2C7102BCED02B007CFAA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22F2C70F2BCED02B007CFAA7 /* Assets.xcassets */; };
 		22F2C7132BCED02B007CFAA7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22F2C7112BCED02B007CFAA7 /* LaunchScreen.storyboard */; };
+		22F2C71A2BCED112007CFAA7 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F2C7192BCED112007CFAA7 /* GameOverScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		22F2C6FF2BCED02B007CFAA7 /* Flappy Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Flappy Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F2C7022BCED02B007CFAA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		22F2C7042BCED02B007CFAA7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		22F2C7062BCED02B007CFAA7 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		22F2C7082BCED02B007CFAA7 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		22F2C70A2BCED02B007CFAA7 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		22F2C70D2BCED02B007CFAA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		22F2C70F2BCED02B007CFAA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		22F2C7122BCED02B007CFAA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		22F2C7192BCED112007CFAA7 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameOverScene.swift; path = ../../RocksAndRocket_James/RocksAndRockets/RocksAndRockets/GameOverScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				22F2C7022BCED02B007CFAA7 /* AppDelegate.swift */,
-				22F2C7042BCED02B007CFAA7 /* GameScene.sks */,
-				22F2C7062BCED02B007CFAA7 /* Actions.sks */,
+				22F2C7192BCED112007CFAA7 /* GameOverScene.swift */,
 				22F2C7082BCED02B007CFAA7 /* GameScene.swift */,
 				22F2C70A2BCED02B007CFAA7 /* GameViewController.swift */,
 				22F2C70C2BCED02B007CFAA7 /* Main.storyboard */,
@@ -130,10 +127,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				22F2C70E2BCED02B007CFAA7 /* Main.storyboard in Resources */,
-				22F2C7052BCED02B007CFAA7 /* GameScene.sks in Resources */,
 				22F2C7102BCED02B007CFAA7 /* Assets.xcassets in Resources */,
 				22F2C7132BCED02B007CFAA7 /* LaunchScreen.storyboard in Resources */,
-				22F2C7072BCED02B007CFAA7 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +141,7 @@
 			files = (
 				22F2C7092BCED02B007CFAA7 /* GameScene.swift in Sources */,
 				22F2C70B2BCED02B007CFAA7 /* GameViewController.swift in Sources */,
+				22F2C71A2BCED112007CFAA7 /* GameOverScene.swift in Sources */,
 				22F2C7032BCED02B007CFAA7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
