@@ -173,7 +173,7 @@ class GameScene: SKScene {
           glider.setScale(gliderScale)
           
         // add physics simulation to the glider node
-        glider.physicsBody = SKPhysicsBody(rectangleOf: glider.size)
+          glider.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: glider.xScale, height: glider.yScale))
         
         // Affected by gravity, friction, collisions, etc..
         glider.physicsBody?.isDynamic = true
@@ -209,15 +209,7 @@ class GameScene: SKScene {
         // setup an action to move the glider from the right to the left, within a certian frame of time.
 
           let actionMove = SKAction.move(to: CGPoint(x: 0 - glider.size.width, y: glider.position.y), duration: TimeInterval(actualDuration))
-          
-          
-        // shoot directly at the falcon (USED FOR TESTING)
-//        let actionMove = SKAction.move(to: CGPoint(x: falcon.position.x, y: falcon.position.y), duration: TimeInterval(actualDuration))
-
-          
-
-          
-    
+        
         
         
         // When movement is complete, we want to remove the glider from the scene (VERY IMPORTANT)

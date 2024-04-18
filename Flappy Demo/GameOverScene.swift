@@ -1,39 +1,37 @@
-
-
 import Foundation
 import SpriteKit
 
 class GameOverScene: SKScene {
-  init(size: CGSize, won:Bool) {
-    super.init(size: size)
-    
-    backgroundColor = SKColor.white
-    
-    let message = won ? "You Won!" : "You Lose :("
-    
-    let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
-    label.text = message
-    label.fontSize = 40
-    label.fontColor = SKColor.black
-    label.position = CGPoint(x: size.width/2, y: size.height/2)
-    addChild(label)
-    
-    run(SKAction.sequence([
-      SKAction.wait(forDuration: 3.0),
-      SKAction.run() { [weak self] in
+    init(size: CGSize, won: Bool) {
+        super.init(size: size)
         
-        // This is a way to "capture" outside variables
-        // in a closure.  We will discuss this in class.
-        guard let `self` = self else { return }
+        backgroundColor = SKColor.white
+        
+        let message1 = "LOSER >_<"
+        let message2 = "Touch the screen to play again!"
+        
+        let label1 = SKLabelNode(fontNamed: "AvenirNext-Bold")
+        label1.text = message1
+        label1.fontSize = 40
+        label1.fontColor = SKColor.black
+        label1.position = CGPoint(x: size.width / 2, y: size.height / 2 + 20) // Adjust Y position for first line
+        addChild(label1)
+        
+        let label2 = SKLabelNode(fontNamed: "AvenirNext-Bold")
+        label2.text = message2
+        label2.fontSize = 20
+        label2.fontColor = SKColor.black
+        label2.position = CGPoint(x: size.width / 2, y: size.height / 2 - 20) // Adjust Y position for second line
+        addChild(label2)
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-        let scene = GameScene(size: size)
-        self.view?.presentScene(scene, transition:reveal)
-      }
-      ]))
-  }
-  
-  // 6
-  required init(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+        let scene = GameScene(size: self.size)
+        self.view?.presentScene(scene, transition: reveal)
+    }
 }

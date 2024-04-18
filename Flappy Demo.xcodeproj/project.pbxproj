@@ -58,12 +58,12 @@
 			isa = PBXGroup;
 			children = (
 				22F2C7022BCED02B007CFAA7 /* AppDelegate.swift */,
+				806D1D392BD168C6003F0BAB /* GameOverScene.swift */,
 				22F2C7082BCED02B007CFAA7 /* GameScene.swift */,
 				22F2C70A2BCED02B007CFAA7 /* GameViewController.swift */,
 				22F2C70C2BCED02B007CFAA7 /* Main.storyboard */,
 				22F2C70F2BCED02B007CFAA7 /* Assets.xcassets */,
 				22F2C7112BCED02B007CFAA7 /* LaunchScreen.storyboard */,
-				806D1D392BD168C6003F0BAB /* GameOverScene.swift */,
 			);
 			path = "Flappy Demo";
 			sourceTree = "<group>";
