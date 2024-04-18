@@ -2,7 +2,7 @@ import Foundation
 import SpriteKit
 
 class GameOverScene: SKScene {
-    init(size: CGSize, won: Bool) {
+    override init(size: CGSize) {
         super.init(size: size)
         
         backgroundColor = SKColor.white

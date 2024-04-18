@@ -1,6 +1,10 @@
 /* Name: Jacob M. James & Angelica M. Noyola
 * Assignment: Final Project - Flappy Falcon
-* Documentation Stmt: We used Chat GPT to make it so that GameOverScene does not go away until the user touches the screen.
+* Documentation Stmt:
+ 
+    We used Chat GPT to make it so that GameOverScene does not go away until the user touches the screen: https://chat.openai.com/share/38f4bf91-c46e-4436-9947-f9ac5238e7bd
+ 
+    
 */
 
 

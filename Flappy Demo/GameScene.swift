@@ -52,15 +52,15 @@ extension CGPoint {
 
 // Our custom game scene...
 class GameScene: SKScene {
-  
+    
     struct PhysicsCategory {
         static let none      : UInt32   = 0
         static let all       : UInt32   = UInt32.max
         static let glider   : UInt32    = 0b1
-        static let projectile: UInt32   = 0b10
+        static let twotter: UInt32   = 0b10
         static let falcon: UInt32       = 0b100
     }
-      
+    
     //create the falcon node
     let falcon = SKSpriteNode(imageNamed: "falcon")
     let mountain = SKSpriteNode(imageNamed: "mountains")
@@ -69,10 +69,10 @@ class GameScene: SKScene {
     var spaceshipHit = 0
     var score = 0
     
-   
     
-//    let stars = SKEmitterNode(fileNamed: "Stars")!
-
+    
+    //    let stars = SKEmitterNode(fileNamed: "Stars")!
+    
     // create the motion manager
     var motionManager: CMMotionManager!
     
@@ -88,10 +88,10 @@ class GameScene: SKScene {
         // set our scene's background color
         backgroundColor = SKColor.skyBlue
         
-
+        
         createfalcon()
         addMountains()
-
+        
         
         
         // we're in space - so no gravity
@@ -107,21 +107,21 @@ class GameScene: SKScene {
         
         // Now, start the game loop
         run(SKAction.repeatForever(
-          SKAction.sequence([
-            SKAction.run(addGlider),
-//            SKAction.run(showScoreBoard),
-            SKAction.wait(forDuration: 1.0)
+            SKAction.sequence([
+                SKAction.run(spawnRandomPlane),
+                //            SKAction.run(showScoreBoard),
+                SKAction.wait(forDuration: 1.5)     // waits 1.5 seconds before spawning a random plane
             ])
         ))
         
-      }
+    }
     
     func createfalcon() {
         // center falcon in Y-axis
         falcon.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
         falcon.zPosition = 2
         falcon.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
-//        falcon.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
+        //        falcon.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
         falcon.physicsBody = SKPhysicsBody(circleOfRadius: falcon.size.width / 4)
         falcon.physicsBody?.isDynamic = true
         // belongs to the "falcon category"
@@ -138,42 +138,59 @@ class GameScene: SKScene {
         mountain.size = CGSize(width: size.width * 5, height: size.height)
         mountain.zPosition = 1
         addChild(mountain)
-
+        
     }
     
-
     
-
     
-
-      
-      //utility function for creating random number...
-      func random() -> CGFloat
-      {
+    
+    
+    
+    
+    //utility function for creating random number...
+    func random() -> CGFloat
+    {
         //Note: arc4random returns an unsigned integer up to (2^32)-1
         //      Here, we're forcing a return of a float between 0 and 1.
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
-      }
-      
-      func random(min: CGFloat, max: CGFloat) -> CGFloat {
+    }
+    
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
         // return a random number between min and max, inclusive
         return random() * (max - min) + min
-      }
-      
+    }
+    
+    func spawnRandomPlane() {
+        let randomPlane = Int(random(min: 1, max: 3))
         
+        if randomPlane == 1{
+            addGlider()
+            print("glider")
+        }
         
-      func addGlider() {
+        if randomPlane == 2{
+            addTwotter()
+            print("twotter")
+        }
+        
+        else {
+            print("shark")
+        }
+        
+    }
+    
+    func addGlider() {
         
         // Create sprite for the glider
         let glider = SKSpriteNode(imageNamed: "glider")
-          
+        
         
         // change size of plane
-          let gliderScale = (size.width * 0.4) / glider.size.width
-          glider.setScale(gliderScale)
-          
+        let gliderScale = (size.width * 0.4) / glider.size.width
+        glider.setScale(gliderScale)
+        
         // add physics simulation to the glider node
-          glider.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: glider.xScale, height: glider.yScale))
+        glider.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: glider.xScale, height: glider.yScale))
         
         // Affected by gravity, friction, collisions, etc..
         glider.physicsBody?.isDynamic = true
@@ -182,135 +199,138 @@ class GameScene: SKScene {
         glider.physicsBody?.categoryBitMask = PhysicsCategory.glider
         
         // Here, we're interested in whether the rocker makes contact with a rock, the falcon, and the earth
-          glider.physicsBody?.contactTestBitMask = PhysicsCategory.falcon | PhysicsCategory.projectile
-
+        glider.physicsBody?.contactTestBitMask = PhysicsCategory.falcon
+        
         
         // define which categories of physics bodies can collide with a glider
         glider.physicsBody?.collisionBitMask = PhysicsCategory.none
         
-
+        
         // Determine where to spawn the glider along the Y axis
         let actualY = random(min: glider.size.height/2, max: size.height - glider.size.height/2)
         
         // Position the glider slightly off-screen along the right edge,
         // and along a random position along the Y axis as calculated above
         glider.position = CGPoint(x: size.width + glider.size.width/2, y: actualY)
-          glider.zPosition = 3
+        glider.zPosition = 3
         
         // Add the glider to the scene
         addChild(glider)
-          
-        // Determine speed of the glider...
-        // can take between 2 and 4 seconds to go from one end of the screen to the other
-        let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+        
         
         // Create the actions...
         
         // setup an action to move the glider from the right to the left, within a certian frame of time.
-
-          let actionMove = SKAction.move(to: CGPoint(x: 0 - glider.size.width, y: glider.position.y), duration: TimeInterval(actualDuration))
+        
+        let actionMove = SKAction.move(to: CGPoint(x: 0 - glider.size.width, y: glider.position.y), duration: TimeInterval(4)) // takes 4 seconds for the glider to cross the screen (slow)
         
         
         
         // When movement is complete, we want to remove the glider from the scene (VERY IMPORTANT)
         let actionMoveDone = SKAction.removeFromParent()
         
-        // This is what happens when the falcon loses (glider gets past you)
         
-        // In this clase we're creating a "closure" - or what many might know as a "lambda"
-        let loseAction = SKAction.run() { [weak self] in //remember why we use "weak"?
-          guard let `self` = self else { return } //
-          let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-//          let gameOverScene = GameOverScene(size: self.size, won: false)
-//          self.view?.presentScene(gameOverScene, transition: reveal)
-        }
+        // ADD SCORE INCREMENTER HERE
+        
         
         // ok, set this new glider node in motion with all of the actions we dfined above
-        glider.run(SKAction.sequence([actionMove, loseAction, actionMoveDone]))
-  }
-    
-    
-  
-  // User touched the screen to throw a rock, let's determine what to do from here...
-  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    // Choose one of the touches to work with
-    guard let touch = touches.first else {
-      return
+        glider.run(SKAction.sequence([actionMove, actionMoveDone]))
     }
-    run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
     
-    
-    // Get falcon's projectile (i.e. a new rock) ready to launch
-    
-    let touchLocation = touch.location(in: self)
-    
-      falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
-      
-  }
-  
-    // Here, we respond to a collision between rock and glider.
-    func projectileDidCollideWithglider(projectile: SKSpriteNode, glider: SKSpriteNode) {
-      print("glider destroyed")
-      projectile.removeFromParent()
-      glider.removeFromParent()
-      
-        score += 10
+    func addTwotter() {
         
-      glidersDestroyed += 1
-      if glidersDestroyed > 30 {
-        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-        let gameOverScene = GameOverScene(size: self.size, won: true)
-        view?.presentScene(gameOverScene, transition: reveal)
-      }
+        // Create sprite for the glider
+        let twotter = SKSpriteNode(imageNamed: "Twotter")
+        
+        
+        // change size of plane
+        let twotterScale = (size.width * 0.4) / twotter.size.width
+        twotter.setScale(twotterScale)
+        
+        // add physics simulation to the twotter node
+        twotter.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: twotter.xScale, height: twotter.yScale))
+        
+        // Affected by gravity, friction, collisions, etc..
+        twotter.physicsBody?.isDynamic = true
+        
+        // belongs to the "twotter category"
+        twotter.physicsBody?.categoryBitMask = PhysicsCategory.twotter
+        
+        // Here, we're interested in whether the rocker makes contact with a rock, the falcon, and the earth
+        twotter.physicsBody?.contactTestBitMask = PhysicsCategory.falcon
+        
+        
+        // define which categories of physics bodies can collide with a twotter
+        twotter.physicsBody?.collisionBitMask = PhysicsCategory.none
+        
+        
+        // Determine where to spawn the twotter along the Y axis
+        let actualY = random(min: twotter.size.height/2, max: size.height - twotter.size.height/2)
+        
+        // Position the twotter slightly off-screen along the right edge,
+        // and along a random position along the Y axis as calculated above
+        twotter.position = CGPoint(x: size.width + twotter.size.width/2, y: actualY)
+        twotter.zPosition = 3
+        
+        // Add the twotter to the scene
+        addChild(twotter)
+        
+        
+        // Create the actions...
+        
+        // setup an action to move the twotter from the right to the left, within a certian frame of time.
+        
+        let actionMove = SKAction.move(to: CGPoint(x: 0 - twotter.size.width, y: twotter.position.y), duration: TimeInterval(3)) // takes 3 seconds for the twotter to cross the screen (slow)
+        
+        
+        
+        // When movement is complete, we want to remove the twotter from the scene (VERY IMPORTANT)
+        let actionMoveDone = SKAction.removeFromParent()
+        
+        
+        // ADD SCORE INCREMENTER HERE
+        
+        
+        // ok, set this new twotter node in motion with all of the actions we dfined above
+        twotter.run(SKAction.sequence([actionMove, actionMoveDone]))
     }
+    
+    // User touched the screen to throw a rock, let's determine what to do from here...
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        // IF WE WANT A SOUND EFFECT WHEN JUMPING, THIS IS WHERE WE INSERT IT
+        //    run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
+        
+        // Everytime we touch the screen, there the jumps upward.
+        falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
+        
+    }
+    
     
     // Here, we respond to a collision between glider and falcon.
     func gliderDidCollideWithfalcon(glider: SKSpriteNode, falcon: SKSpriteNode) {
-        print("Hit falcon")
+        print("Hit glider")
         glider.removeFromParent()
-      
+        
         let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-        let gameOverScene = GameOverScene(size: self.size, won: false)
+        let gameOverScene = GameOverScene(size: self.size)
         view?.presentScene(gameOverScene, transition: reveal)
-
+        
     }
     
-  
-
+    // Here, we respond to a collision between the twotter and falcon.
+    func twotterDidCollideWithfalcon(twotter: SKSpriteNode, falcon: SKSpriteNode) {
+        print("Hit twotter")
+        twotter.removeFromParent()
         
- 
-
-    // Here, we respond to a collision between projectile and the spaceship.
-    func projectileDidCollideWithSpaceship(projectile: SKSpriteNode, spaceship: SKSpriteNode) {
-      print("Hit spaceship")
-      projectile.removeFromParent()
-      
-        score += 50
-    
-        // Add the particle effects
-        if let explosion = SKEmitterNode(fileNamed: "Explosion") {
-            explosion.position = CGPoint(x: projectile.position.x, y: projectile.position.y)
-            explosion.particleLifetime = 5
-            addChild(explosion)
-            
-            // Remove explosion after 2 seconds
-            let removeAfterDelay = SKAction.sequence([
-                SKAction.wait(forDuration: 0.8),
-                SKAction.removeFromParent()
-            ])
-            explosion.run(removeAfterDelay)
-        }
-        
-        
-      spaceshipHit += 1
-      if spaceshipHit >= 100 {
         let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-        let gameOverScene = GameOverScene(size: self.size, won: true)
+        let gameOverScene = GameOverScene(size: self.size)
         view?.presentScene(gameOverScene, transition: reveal)
-      }
+        
     }
     
- 
+    
+    
 }
 
 // Here, we're told that two objects made contact
@@ -331,17 +351,6 @@ extension GameScene: SKPhysicsContactDelegate {
         print(firstBody.categoryBitMask)
         print(secondBody.categoryBitMask)
         
-        // respond if we determine that a rock and glider made contact
-        if ((firstBody.categoryBitMask & PhysicsCategory.glider == firstBody.categoryBitMask) &&
-            (secondBody.categoryBitMask & PhysicsCategory.projectile == secondBody.categoryBitMask)) {
-            
-            
-            if let glider = firstBody.node as? SKSpriteNode,
-               let projectile = secondBody.node as? SKSpriteNode {
-                projectileDidCollideWithglider(projectile: projectile, glider: glider)
-            }
-        }
-        
         // respond if we determine that a glider and the falcon made contact
         if ((firstBody.categoryBitMask & PhysicsCategory.glider == firstBody.categoryBitMask) &&
             (secondBody.categoryBitMask & PhysicsCategory.falcon == secondBody.categoryBitMask)) {
@@ -352,6 +361,16 @@ extension GameScene: SKPhysicsContactDelegate {
             }
         }
         
+        
+        // respond if we determine that the twotter and the falcon made contact
+        if ((firstBody.categoryBitMask & PhysicsCategory.twotter == firstBody.categoryBitMask) &&
+            (secondBody.categoryBitMask & PhysicsCategory.falcon == secondBody.categoryBitMask)) {
+            
+            if let twotter = firstBody.node as? SKSpriteNode,
+               let falcon = secondBody.node as? SKSpriteNode {
+                twotterDidCollideWithfalcon(twotter: twotter, falcon: falcon)
+            }
+        }
         
 
     }
@@ -365,7 +384,7 @@ extension GameScene: SKPhysicsContactDelegate {
         if (falcon.position.y < 0 || falcon.position.y > size.height) {
               
             let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-            let gameOverScene = GameOverScene(size: self.size, won: false)
+            let gameOverScene = GameOverScene(size: self.size)
             view?.presentScene(gameOverScene, transition: reveal)
 
             }
