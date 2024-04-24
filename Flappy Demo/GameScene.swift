@@ -185,12 +185,12 @@ class GameScene: SKScene {
         let glider = SKSpriteNode(imageNamed: "glider")
         
         
-        // change size of plane
-        let gliderScale = (size.width * 0.4) / glider.size.width
-        glider.setScale(gliderScale)
+        // change size of glider
+        glider.size.width = glider.size.width * 0.25
+        glider.size.height  = glider.size.height * 0.25
         
         // add physics simulation to the glider node
-        glider.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: glider.xScale, height: glider.yScale))
+        glider.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: glider.size.width * 0.4, height: glider.size.height * 0.1))
         
         // Affected by gravity, friction, collisions, etc..
         glider.physicsBody?.isDynamic = true
