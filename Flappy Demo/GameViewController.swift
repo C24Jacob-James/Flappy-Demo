@@ -27,31 +27,24 @@ class LoadingScene: SKScene {
         falconSprite.position = CGPoint(x: frame.midX, y: frame.midY)
         falconSprite.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
 
-       // Define the flight path
-//        let flightPath = UIBezierPath()
-//        flightPath.move(to: CGPoint(x: frame.minX, y: frame.midY))
-//        flightPath.addCurve(to: CGPoint(x: frame.maxX, y: frame.midY), 
-//                            controlPoint1: CGPoint(x: frame.midX/2, y: 0.1),
-//                            controlPoint2: CGPoint(x: frame.midX*1.5, y: 0.1))
-
         // Create a squiggly flight path
-            let flightPath = UIBezierPath()
-            flightPath.move(to: CGPoint(x: frame.minX, y: frame.midY))
+        let flightPath = UIBezierPath()
+        flightPath.move(to: CGPoint(x: frame.minX, y: frame.midY))
 
-            // Define points for a squiggly line
-            let numberOfSquiggles = 5
-            let squiggleWidth = frame.width / CGFloat(numberOfSquiggles)
-            var currentX = frame.minX
+        // Define points for a squiggly line
+        let numberOfSquiggles = 5
+        let squiggleWidth = frame.width / CGFloat(numberOfSquiggles)
+        var currentX = frame.minX
                 
-            for i in 0..<numberOfSquiggles {
-                let nextX = currentX + squiggleWidth
-                let controlPoint1Y = frame.midY + (i % 2 == 0 ? -50 : 50)  // Alternate bump directions
-                let controlPoint2Y = frame.midY + (i % 2 == 0 ? 50 : -50)
-                flightPath.addCurve(to: CGPoint(x: nextX, y: frame.midY),
-                            controlPoint1: CGPoint(x: currentX + squiggleWidth / 2, y: controlPoint1Y),
-                            controlPoint2: CGPoint(x: currentX + squiggleWidth / 2, y: controlPoint2Y))
-                currentX = nextX
-                }
+        for i in 0..<numberOfSquiggles {
+            let nextX = currentX + squiggleWidth
+            let controlPoint1Y = frame.midY + (i % 2 == 0 ? -50 : 50)  // Alternate bump directions
+            let controlPoint2Y = frame.midY + (i % 2 == 0 ? 50 : -50)
+            flightPath.addCurve(to: CGPoint(x: nextX, y: frame.midY),
+                        controlPoint1: CGPoint(x: currentX + squiggleWidth / 2, y: controlPoint1Y),
+                        controlPoint2: CGPoint(x: currentX + squiggleWidth / 2, y: controlPoint2Y))
+            currentX = nextX
+        }
 
         // Falcon follows the path
         let followPath = SKAction.follow(flightPath.cgPath, asOffset: false, orientToPath: false, speed: 200)
@@ -88,7 +81,7 @@ class GameViewController: UIViewController {
               if isLoading {
                   presentLoadingScene(skView)
               } else {
-                  presentGameScene(skView)
+                  presentHomeScene(skView)
               }
   }
   
@@ -103,7 +96,7 @@ class GameViewController: UIViewController {
         // Simulate loading process
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) { // Adjust time as needed
             self.isLoading = false
-            self.presentGameScene(skView)
+            self.presentHomeScene(skView)
         }
     }
     
@@ -111,5 +104,11 @@ class GameViewController: UIViewController {
         let scene = GameScene(size: view.bounds.size)
         scene.scaleMode = .resizeFill
         skView.presentScene(scene)
+    }
+    
+    private func presentHomeScene(_ skView: SKView) {
+            let homeScene = HomeScene(size: view.bounds.size)
+            homeScene.scaleMode = .resizeFill
+            skView.presentScene(homeScene)
     }
 }
