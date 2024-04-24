@@ -4,7 +4,7 @@
  
     We used Chat GPT to make it so that GameOverScene does not go away until the user touches the screen: https://chat.openai.com/share/38f4bf91-c46e-4436-9947-f9ac5238e7bd
  
-    Used Chat GPT to generate the loading screen - blue sky gradient:
+    Used Chat GPT to generate the loading screen - blue sky gradient, and helped me set up and organize my loading screen. Including the code to make the falcon fly across the screen: https://chat.openai.com/share/6c073900-b947-46f9-9960-c9cc824e16e0
  
     
 */
@@ -27,10 +27,31 @@ class LoadingScene: SKScene {
         falconSprite.position = CGPoint(x: frame.midX, y: frame.midY)
         falconSprite.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
 
-        // Define the flight path
-        let flightPath = UIBezierPath()
-        flightPath.move(to: CGPoint(x: frame.minX, y: frame.midY))
-        flightPath.addCurve(to: CGPoint(x: frame.maxX, y: frame.midY), controlPoint1: CGPoint(x: frame.midX/2, y: frame.minY), controlPoint2: CGPoint(x: frame.midX*1.5, y: frame.maxY))
+       // Define the flight path
+//        let flightPath = UIBezierPath()
+//        flightPath.move(to: CGPoint(x: frame.minX, y: frame.midY))
+//        flightPath.addCurve(to: CGPoint(x: frame.maxX, y: frame.midY), 
+//                            controlPoint1: CGPoint(x: frame.midX/2, y: 0.1),
+//                            controlPoint2: CGPoint(x: frame.midX*1.5, y: 0.1))
+
+        // Create a squiggly flight path
+            let flightPath = UIBezierPath()
+            flightPath.move(to: CGPoint(x: frame.minX, y: frame.midY))
+
+            // Define points for a squiggly line
+            let numberOfSquiggles = 5
+            let squiggleWidth = frame.width / CGFloat(numberOfSquiggles)
+            var currentX = frame.minX
+                
+            for i in 0..<numberOfSquiggles {
+                let nextX = currentX + squiggleWidth
+                let controlPoint1Y = frame.midY + (i % 2 == 0 ? -50 : 50)  // Alternate bump directions
+                let controlPoint2Y = frame.midY + (i % 2 == 0 ? 50 : -50)
+                flightPath.addCurve(to: CGPoint(x: nextX, y: frame.midY),
+                            controlPoint1: CGPoint(x: currentX + squiggleWidth / 2, y: controlPoint1Y),
+                            controlPoint2: CGPoint(x: currentX + squiggleWidth / 2, y: controlPoint2Y))
+                currentX = nextX
+                }
 
         // Falcon follows the path
         let followPath = SKAction.follow(flightPath.cgPath, asOffset: false, orientToPath: false, speed: 200)
