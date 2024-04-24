@@ -37,6 +37,14 @@ class LoadingScene: SKScene {
         falconSprite.run(SKAction.repeatForever(followPath))
 
         addChild(falconSprite)
+        
+        // Add loading text
+        let loadingLabel = SKLabelNode(fontNamed: "Courier")
+        loadingLabel.text = "Loading..."
+        loadingLabel.fontSize = 30
+        loadingLabel.fontColor = SKColor.black
+        loadingLabel.position = CGPoint(x: frame.midX, y: falconSprite.position.y - falconSprite.size.height / 2 - 20)  // Adjust the Y position to be below the falcon
+        addChild(loadingLabel)
     }
 }
 
