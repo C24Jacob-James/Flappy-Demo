@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="loadingScreen" translatesAutoresizingMaskIntoConstraints="NO" id="yZc-Eb-NJe">
-                                <rect key="frame" x="0.0" y="-458" width="1276" height="2200"/>
+                                <rect key="frame" x="0.0" y="-539" width="1405" height="2441"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -31,7 +31,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="loadingScreen" width="1220" height="1578"/>
+        <image name="loadingScreen" width="525" height="514"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
