@@ -12,6 +12,10 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
+    
+    var isLoading = true // here to manage loading status
+    
+    
   override func viewDidLoad() {
     super.viewDidLoad()
     let scene = GameScene(size: view.bounds.size)
