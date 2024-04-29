@@ -33,6 +33,13 @@ class HomeScene: SKScene{
         startGameLabel.fontColor = .blue
         startGameLabel.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(startGameLabel)
+        
+        let bigFalcon = SKSpriteNode(imageNamed: "falcon")
+        bigFalcon.position = CGPoint(x: frame.midX, y: frame.midY)
+        bigFalcon.size = CGSize(width: size.width * 0.5, height: size.width * 0.6)
+        bigFalcon.zPosition = 2
+        addChild(bigFalcon)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
