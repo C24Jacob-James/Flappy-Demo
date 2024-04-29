@@ -14,7 +14,9 @@ class HomeScene: SKScene{
         let backgroundColor = SKSpriteNode(imageNamed: "mountains")
         backgroundColor.position = CGPoint(x: frame.midX, y: frame.midY)
         backgroundColor.zPosition = -1  // Ensure it stays in the background
-        backgroundColor.scale(to: frame.size) // Scale the image to fit the frame
+        let scale =  frame.size.height/backgroundColor.size.height
+        //backgroundColor.scale(to: frame.size) // Scale the image to fit the frame
+        backgroundColor.setScale(scale)
         addChild(backgroundColor)
         
         let titleLabel = SKLabelNode(fontNamed: "Arial")
