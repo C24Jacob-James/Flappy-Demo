@@ -66,7 +66,6 @@ class GameScene: SKScene {
     let mountain = SKSpriteNode(imageNamed: "mountains")
     var glidersDestroyed = 0
     var falconHit = 0
-    var spaceshipHit = 0
     var score = 0
     
     
@@ -135,8 +134,10 @@ class GameScene: SKScene {
     func addMountains() {
         // center the mountains in the y axis
         mountain.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        mountain.size = CGSize(width: size.width * 5, height: size.height)
+//        mountain.size = CGSize(width: size.width * 5, height: size.height)
         mountain.zPosition = 1
+        let scale =  frame.size.height/mountain.size.height
+        mountain.setScale(scale)
         addChild(mountain)
         
     }
@@ -383,9 +384,12 @@ extension GameScene: SKPhysicsContactDelegate {
         // end the game if the edges are hit
         if (falcon.position.y < 0 || falcon.position.y > size.height) {
               
-            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-            let gameOverScene = GameOverScene(size: self.size)
-            view?.presentScene(gameOverScene, transition: reveal)
+            let reveal = SKTransition.crossFade(withDuration: 3)
+            let homeScene = HomeScene(size: self.size)
+            view?.presentScene(homeScene, transition: reveal)
+
+//            let gameOverScene = GameOverScene(size: self.size)
+//            view?.presentScene(gameOverScene, transition: reveal)
 
             }
         }

@@ -5,7 +5,7 @@ class GameOverScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
-        backgroundColor = SKColor.white
+        backgroundColor = SKColor.clear
         
         let message1 = "LOSER >_<"
         let message2 = "Touch the screen to play again!"
