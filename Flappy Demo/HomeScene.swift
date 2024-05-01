@@ -19,20 +19,46 @@ class HomeScene: SKScene{
         backgroundColor.setScale(scale)
         addChild(backgroundColor)
         
-        let titleLabel = SKLabelNode(fontNamed: "Arial")
-        titleLabel.text = "Welcome to the Game"
-        titleLabel.fontSize = 40
+        let titleLabel = SKLabelNode(fontNamed: "Courier-Bold")
+        titleLabel.text = "Flappy Falcon"
+        titleLabel.fontSize = 60
         titleLabel.fontColor = .black
-        titleLabel.position = CGPoint(x: frame.midX, y: frame.midY + 100)
+        titleLabel.position = CGPoint(x: frame.midX, y: frame.midY + 300)
         addChild(titleLabel)
         
         
-        let startGameLabel = SKLabelNode(fontNamed: "Arial")
-        startGameLabel.text = "Tap to Start Game"
+        let startGameLabel = SKLabelNode(fontNamed: "Courier")
+        startGameLabel.text = "Tap Flappy Falcon to Start"
         startGameLabel.fontSize = 30
-        startGameLabel.fontColor = .blue
-        startGameLabel.position = CGPoint(x: frame.midX, y: frame.midY)
+        startGameLabel.fontColor = .white
+        startGameLabel.position = CGPoint(x: frame.midX, y: frame.midY - 300)
         addChild(startGameLabel)
+        
+        // Create the bouncing action
+//        let moveUp = SKAction.moveBy(x: 0, y: 10, duration: 0.5)
+//        let moveDown = moveUp.reversed()
+//        let bounce = SKAction.sequence([moveUp, moveDown])
+//        let repeatBounce = SKAction.repeatForever(bounce)
+
+        // Run the action
+        //startGameLabel.run(repeatBounce)
+        
+        let bigFalcon = SKSpriteNode(imageNamed: "Falcon 1")
+        bigFalcon.name = "falcon"
+        bigFalcon.position = CGPoint(x: frame.midX, y: frame.midY)
+        bigFalcon.size = CGSize(width: size.width * 0.5, height: size.width * 0.6)
+        bigFalcon.zPosition = 2
+        addChild(bigFalcon)
+        
+        // Create the bouncing action
+        let moveUp = SKAction.moveBy(x: 0, y: 10, duration: 0.5)
+        let moveDown = moveUp.reversed()
+        let bounce = SKAction.sequence([moveUp, moveDown])
+        let repeatBounce = SKAction.repeatForever(bounce)
+
+        // Run the action
+        bigFalcon.run(repeatBounce)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -40,7 +66,7 @@ class HomeScene: SKScene{
             let location = touch.location(in: self)
             let nodes = self.nodes(at: location)
             for node in nodes {
-                if node is SKLabelNode {
+                if node.name == "falcon" {
                     transitionToGameScene()
                 }
             }
