@@ -8,6 +8,7 @@
  
     Chat GPT helped me fix the home screen background image, before it was really really squished together and it was difficult adjusting it to fit normally on the screen, chat chpt gave me the formual to adjust the size of the image by adjusting the scale of the home screen image. https://chat.openai.com/share/1c43a61e-260d-420f-a1c0-4647dd582b92
  
+    Chat GPT helped me adjust the fonts of the homescreen, as well as helped me figure out how to make the falcon bounce on the home screen: https://chat.openai.com/share/4cba7db0-e79f-4586-91cd-ccf53185f9d9
     
 */
 
