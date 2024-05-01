@@ -1,8 +1,9 @@
 //
 //  AppDelegate.swift
-//  RocksAndRockets
+//  Flappy Falcon
 //
-//  Created by Jacob James on 18 Apr 2024.
+// Name: Jacob M. James & Angelica M. Noyola
+// Assignment: Final Project - Flappy Falcon
 //
 
 

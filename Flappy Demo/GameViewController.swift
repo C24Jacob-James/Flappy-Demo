@@ -10,6 +10,7 @@
  
     Chat GPT helped me adjust the fonts of the homescreen, as well as helped me figure out how to make the falcon bounce on the home screen: https://chat.openai.com/share/4cba7db0-e79f-4586-91cd-ccf53185f9d9
     
+    Chat GPT helped us make move the background image to create an infinite scrolling effect: https://chat.openai.com/share/d44787b7-d022-4af1-b00d-9d4eb0cf7f89
 */
 
 

@@ -1,9 +1,9 @@
 //
 //  GameScene.swift
-//  RocksAndgliders
+//  Flappy Falcon
 //
-//  Created by Chad Mello on 2/6/20.
-//  Copyright © 2020 Chad Mello. All rights reserved.
+// Name: Jacob M. James & Angelica M. Noyola
+// Assignment: Final Project - Flappy Falcon
 //
 
 import SpriteKit
@@ -61,13 +61,18 @@ class GameScene: SKScene {
         static let falcon: UInt32       = 0b100
     }
     
-    //create the falcon node
+    //create the falcon node and score variables
     let falcon = SKSpriteNode(imageNamed: "falcon")
-//    let mountain = SKSpriteNode(imageNamed: "mountains")
     var score = 0
+    
+    // create the background nodes
     var background1: SKSpriteNode!
     var background2: SKSpriteNode!
     
+    // create the timer nodes
+    var timerLabel: SKLabelNode!
+    var elapsedTime: TimeInterval = 0
+    var lastUpdateTime: TimeInterval = 0
     
     //    let stars = SKEmitterNode(fileNamed: "Stars")!
     
@@ -87,6 +92,9 @@ class GameScene: SKScene {
         
         // Start the background movement
         startMovingBackgrounds()
+        
+        // start the timer
+        setupTimerLabel()
         
         super.didMove(to: view)
         
@@ -126,6 +134,29 @@ class GameScene: SKScene {
         
     }
     
+    
+    func setupTimerLabel() {
+        timerLabel = SKLabelNode(fontNamed: "AmericanTypewriter-Bold") // Assuming the bold version is correctly named
+        timerLabel.fontSize = 30 // Set font size to 60
+        timerLabel.fontColor = SKColor.black // Text color is white
+        timerLabel.position = CGPoint(x: size.width * 0.1, y: size.height * 0.9) // Adjusted position
+        timerLabel.zPosition = 5 // Ensure it is above other nodes
+        timerLabel.horizontalAlignmentMode = .left
+        timerLabel.text = "Time: 0.0"
+
+        // Set up outline
+        let outline = SKLabelNode(fontNamed: "AmericanTypewriter-Bold")
+        outline.fontSize = timerLabel.fontSize
+        outline.fontColor = SKColor.white
+        outline.position = CGPoint(x: 0, y: 0) // Adjust outline offset
+        outline.zPosition = -1 // Ensure the outline is behind the main text
+        outline.horizontalAlignmentMode = .left
+        outline.text = "Time: 0.0"
+
+        timerLabel.addChild(outline) // Add outline as a child of the main label to keep them aligned
+        addChild(timerLabel) // Add the main label to the scene
+    }
+    
     func createfalcon() {
         // center falcon in Y-axis
         falcon.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
@@ -141,18 +172,7 @@ class GameScene: SKScene {
         // add falcon to the scene
         addChild(falcon)
     }
-    
-//    func addMountains() {
-//        // center the mountains in the y axis
-//        mountain.position = CGPoint(x: size.width / 2, y: size.height / 2)
-////        mountain.size = CGSize(width: size.width * 5, height: size.height)
-//        mountain.zPosition = 1
-//        let scale =  frame.size.height/mountain.size.height
-//        mountain.setScale(scale)
-//        addChild(mountain)
-//        
-//    }
-    
+        
     func createBackground() -> SKSpriteNode {
         let bg = SKSpriteNode(imageNamed: "mountains") // Replace with your actual image
         bg.zPosition = -1 // Ensure it's behind other sprites
@@ -176,8 +196,6 @@ class GameScene: SKScene {
         background1.run(repeatForever)
         background2.run(repeatForever)
     }
-    
-    
     
     
     
@@ -412,7 +430,26 @@ extension GameScene: SKPhysicsContactDelegate {
     // This method gets called before each frame is rendered
     override func update(_ currentTime: TimeInterval) {
         
+        // update the timer
         super.update(currentTime)
+
+        if lastUpdateTime == 0 {
+            lastUpdateTime = currentTime
+        }
+
+        let deltaTime = currentTime - lastUpdateTime
+        elapsedTime += deltaTime
+
+        // Format the new time
+        let formattedTime = String(format: "Time: %.1f", elapsedTime)
+
+        // Update the main timer label and its outline
+        timerLabel.text = formattedTime
+        if let outlineLabel = timerLabel.children.first as? SKLabelNode {
+            outlineLabel.text = formattedTime
+        }
+
+        lastUpdateTime = currentTime
         
         // end the game if the edges are hit
         if (falcon.position.y < 0 || falcon.position.y > size.height) {
