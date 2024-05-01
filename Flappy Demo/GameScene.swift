@@ -168,7 +168,7 @@ class GameScene: SKScene {
     }
     
     func startMovingBackgrounds() {
-        let moveLeft = SKAction.moveBy(x: -background1.size.width, y: 0, duration: 20.0) // Adjust duration for speed
+        let moveLeft = SKAction.moveBy(x: -background1.size.width, y: 0, duration: 40.0) // Adjust duration for speed
         let resetPosition = SKAction.moveBy(x: background1.size.width, y: 0, duration: 0)
         let moveSequence = SKAction.sequence([moveLeft, resetPosition])
         let repeatForever = SKAction.repeatForever(moveSequence)
@@ -346,7 +346,7 @@ class GameScene: SKScene {
         print("Hit glider")
         glider.removeFromParent()
         
-        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+        let reveal = SKTransition.crossFade(withDuration: 3)
         let gameOverScene = GameOverScene(size: self.size)
         view?.presentScene(gameOverScene, transition: reveal)
         
@@ -357,7 +357,7 @@ class GameScene: SKScene {
         print("Hit twotter")
         twotter.removeFromParent()
         
-        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+        let reveal = SKTransition.crossFade(withDuration: 3)
         let gameOverScene = GameOverScene(size: self.size)
         view?.presentScene(gameOverScene, transition: reveal)
         
@@ -418,8 +418,8 @@ extension GameScene: SKPhysicsContactDelegate {
         if (falcon.position.y < 0 || falcon.position.y > size.height) {
               
             let reveal = SKTransition.crossFade(withDuration: 3)
-            let homeScene = HomeScene(size: self.size)
-            view?.presentScene(homeScene, transition: reveal)
+            let gameOverScene = GameOverScene(size: self.size)
+            view?.presentScene(gameOverScene, transition: reveal)
 
 //            let gameOverScene = GameOverScene(size: self.size)
 //            view?.presentScene(gameOverScene, transition: reveal)
