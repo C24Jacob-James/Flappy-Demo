@@ -63,11 +63,10 @@ class GameScene: SKScene {
     
     //create the falcon node
     let falcon = SKSpriteNode(imageNamed: "falcon")
-    let mountain = SKSpriteNode(imageNamed: "mountains")
-    var glidersDestroyed = 0
-    var falconHit = 0
+//    let mountain = SKSpriteNode(imageNamed: "mountains")
     var score = 0
-    
+    var background1: SKSpriteNode!
+    var background2: SKSpriteNode!
     
     
     //    let stars = SKEmitterNode(fileNamed: "Stars")!
@@ -76,6 +75,18 @@ class GameScene: SKScene {
     var motionManager: CMMotionManager!
     
     override func didMove(to view: SKView) {
+        
+        // Initialize and set up backgrounds
+        background1 = createBackground()
+        background1.position = CGPoint(x: 0, y: 0)
+        addChild(background1)
+
+        background2 = createBackground()
+        background2.position = CGPoint(x: background1.size.width, y: 0)
+        addChild(background2)
+        
+        // Start the background movement
+        startMovingBackgrounds()
         
         super.didMove(to: view)
         
@@ -89,7 +100,7 @@ class GameScene: SKScene {
         
         
         createfalcon()
-        addMountains()
+//        addMountains()
         
         
         
@@ -131,18 +142,40 @@ class GameScene: SKScene {
         addChild(falcon)
     }
     
-    func addMountains() {
-        // center the mountains in the y axis
-        mountain.position = CGPoint(x: size.width / 2, y: size.height / 2)
-//        mountain.size = CGSize(width: size.width * 5, height: size.height)
-        mountain.zPosition = 1
-        let scale =  frame.size.height/mountain.size.height
-        mountain.setScale(scale)
-        addChild(mountain)
+//    func addMountains() {
+//        // center the mountains in the y axis
+//        mountain.position = CGPoint(x: size.width / 2, y: size.height / 2)
+////        mountain.size = CGSize(width: size.width * 5, height: size.height)
+//        mountain.zPosition = 1
+//        let scale =  frame.size.height/mountain.size.height
+//        mountain.setScale(scale)
+//        addChild(mountain)
+//        
+//    }
+    
+    func createBackground() -> SKSpriteNode {
+        let bg = SKSpriteNode(imageNamed: "mountains") // Replace with your actual image
+        bg.zPosition = -1 // Ensure it's behind other sprites
+        bg.anchorPoint = CGPoint.zero
         
+        bg.position = CGPoint(x: size.width / 2, y: size.height / 2)
+//        bg.size = CGSize(width: size.width * 5, height: size.height)
+        bg.zPosition = 1
+        let scale =  frame.size.height/bg.size.height
+        bg.setScale(scale)
+        
+        return bg
     }
     
-    
+    func startMovingBackgrounds() {
+        let moveLeft = SKAction.moveBy(x: -background1.size.width, y: 0, duration: 20.0) // Adjust duration for speed
+        let resetPosition = SKAction.moveBy(x: background1.size.width, y: 0, duration: 0)
+        let moveSequence = SKAction.sequence([moveLeft, resetPosition])
+        let repeatForever = SKAction.repeatForever(moveSequence)
+
+        background1.run(repeatForever)
+        background2.run(repeatForever)
+    }
     
     
     

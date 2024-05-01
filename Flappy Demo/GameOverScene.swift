@@ -2,36 +2,74 @@ import Foundation
 import SpriteKit
 
 class GameOverScene: SKScene {
-    override init(size: CGSize) {
-        super.init(size: size)
+    override func didMove(to view: SKView){
+        //backgroundColor = .white // Or any appropriate background color
+        let backgroundColor = SKSpriteNode(imageNamed: "mountains")
+        backgroundColor.position = CGPoint(x: frame.midX, y: frame.midY)
+        backgroundColor.zPosition = -1  // Ensure it stays in the background
+        let scale =  frame.size.height/backgroundColor.size.height
+        //backgroundColor.scale(to: frame.size) // Scale the image to fit the frame
+        backgroundColor.setScale(scale)
+        addChild(backgroundColor)
         
-        backgroundColor = SKColor.clear
+        let titleLabel = SKLabelNode(fontNamed: "Courier-Bold")
+        titleLabel.text = "Flappy Falcon"
+        titleLabel.fontSize = 60
+        titleLabel.fontColor = .black
+        titleLabel.position = CGPoint(x: frame.midX, y: frame.midY + 300)
+        addChild(titleLabel)
         
-        let message1 = "LOSER >_<"
-        let message2 = "Touch the screen to play again!"
         
-        let label1 = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        label1.text = message1
-        label1.fontSize = 40
-        label1.fontColor = SKColor.black
-        label1.position = CGPoint(x: size.width / 2, y: size.height / 2 + 20) // Adjust Y position for first line
-        addChild(label1)
+        let startGameLabel = SKLabelNode(fontNamed: "Courier")
+        startGameLabel.text = "Tap Flappy Falcon to Start"
+        startGameLabel.fontSize = 30
+        startGameLabel.fontColor = .white
+        startGameLabel.position = CGPoint(x: frame.midX, y: frame.midY - 300)
+        addChild(startGameLabel)
         
-        let label2 = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        label2.text = message2
-        label2.fontSize = 20
-        label2.fontColor = SKColor.black
-        label2.position = CGPoint(x: size.width / 2, y: size.height / 2 - 20) // Adjust Y position for second line
-        addChild(label2)
+        // Create the bouncing action
+//        let moveUp = SKAction.moveBy(x: 0, y: 10, duration: 0.5)
+//        let moveDown = moveUp.reversed()
+//        let bounce = SKAction.sequence([moveUp, moveDown])
+//        let repeatBounce = SKAction.repeatForever(bounce)
+
+        // Run the action
+        //startGameLabel.run(repeatBounce)
+        
+        let bigFalcon = SKSpriteNode(imageNamed: "Falcon 1")
+        bigFalcon.name = "falcon"
+        bigFalcon.position = CGPoint(x: frame.midX, y: frame.midY)
+        bigFalcon.size = CGSize(width: size.width * 0.5, height: size.width * 0.6)
+        bigFalcon.zPosition = 2
+        addChild(bigFalcon)
+        
+        // Create the bouncing action
+        let moveUp = SKAction.moveBy(x: 0, y: 10, duration: 0.5)
+        let moveDown = moveUp.reversed()
+        let bounce = SKAction.sequence([moveUp, moveDown])
+        let repeatBounce = SKAction.repeatForever(bounce)
+
+        // Run the action
+        bigFalcon.run(repeatBounce)
+        
     }
     
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
-        let scene = GameScene(size: self.size)
-        self.view?.presentScene(scene, transition: reveal)
+        if let touch = touches.first {
+            let location = touch.location(in: self)
+            let nodes = self.nodes(at: location)
+            for node in nodes {
+                if node.name == "falcon" {
+                    transitionToGameScene()
+                }
+            }
+        }
+    }
+        
+    private func transitionToGameScene() {
+        let transition = SKTransition.fade(withDuration: 1.0)
+        let gameScene = GameScene(size: self.size)
+        self.view?.presentScene(gameScene, transition: transition)
     }
 }
+

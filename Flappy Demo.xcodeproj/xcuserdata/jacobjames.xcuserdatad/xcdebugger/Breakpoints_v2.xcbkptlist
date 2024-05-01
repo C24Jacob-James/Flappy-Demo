@@ -14,9 +14,9 @@
             filePath = "Flappy Demo/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
-            landmarkName = "spawnRandomPlane()"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
+            landmarkName = "addGlider()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
