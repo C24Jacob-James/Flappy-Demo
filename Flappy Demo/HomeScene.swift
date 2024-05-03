@@ -28,7 +28,7 @@ class HomeScene: SKScene{
         
         
         let startGameLabel = SKLabelNode(fontNamed: "Courier")
-        startGameLabel.text = "Tap Flappy Falcon to Start"
+        startGameLabel.text = "Tap Flappy Falcon to Take Flight"
         startGameLabel.fontSize = 30
         startGameLabel.fontColor = .white
         startGameLabel.position = CGPoint(x: frame.midX, y: frame.midY - 300)

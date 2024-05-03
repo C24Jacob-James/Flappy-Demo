@@ -58,7 +58,8 @@ class GameScene: SKScene {
         static let all       : UInt32   = UInt32.max
         static let glider    : UInt32   = 0b1
         static let twotter   : UInt32   = 0b10
-        static let falcon    : UInt32    = 0b100
+        static let falcon    : UInt32   = 0b100
+        static let t53       : UInt32   = 0b1000
     }
     
     //create the falcon node
@@ -239,7 +240,7 @@ class GameScene: SKScene {
     }
     
     func spawnRandomPlane() {
-        let randomPlane = Int(random(min: 1, max: 3))
+        let randomPlane = Int(random(min: 1, max: 4))
         
         if randomPlane == 1{
             addGlider()
@@ -249,6 +250,11 @@ class GameScene: SKScene {
         if randomPlane == 2{
             addTwotter()
             print("twotter")
+        }
+        
+        if randomPlane == 3{
+            addT53()
+            print("t53")
         }
         
         else {
@@ -383,9 +389,73 @@ class GameScene: SKScene {
         let actionMoveDone = SKAction.removeFromParent()
 
         
-        
         // ok, set this new twotter node in motion with all of the actions we dfined above
         twotter.run(SKAction.sequence([actionMove,checkPass,actionMoveDone]))
+    }
+    
+    func addT53(){
+        
+        // Create sprite for the glider
+        let t53 = SKSpriteNode(imageNamed: "T53")
+        
+        
+        // change size of plane
+        let t53Scale = (size.width * 0.4) / t53.size.width
+        t53.setScale(t53Scale)
+        
+        // add physics simulation to the twotter node
+        t53.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: t53.xScale, height: t53.yScale))
+        
+        // Affected by gravity, friction, collisions, etc..
+        t53.physicsBody?.isDynamic = true
+        
+        // belongs to the "t53 category"
+        t53.physicsBody?.categoryBitMask = PhysicsCategory.t53
+        
+        // Here, we're interested in whether the rocker makes contact with a rock, the falcon, and the earth
+        t53.physicsBody?.contactTestBitMask = PhysicsCategory.falcon
+        
+        
+        // define which categories of physics bodies can collide with a twotter
+        t53.physicsBody?.collisionBitMask = PhysicsCategory.none
+        
+        
+        // Determine where to spawn the twotter along the Y axis
+        let actualY = random(min: t53.size.height/2, max: size.height - t53.size.height/2)
+        
+        // Position the twotter slightly off-screen along the right edge,
+        // and along a random position along the Y axis as calculated above
+        t53.position = CGPoint(x: size.width + t53.size.width/2, y: actualY)
+        t53.zPosition = 3
+        
+        // Add the twotter to the scene
+        addChild(t53)
+        
+        
+        // Create the actions...
+        
+        // setup an action to move the twotter from the right to the left, within a certian frame of time.
+        
+        let actionMove = SKAction.move(to: CGPoint(x: 0 - t53.size.width, y: t53.position.y), duration: TimeInterval(3)) // takes 3 seconds for the twotter to cross the screen (slow)
+        
+        // score increases if falcon passes the twotter
+        let checkPass = SKAction.run{
+            if t53.parent != nil{
+                self.score += 1
+                self.scoreOutline.text = "Score: \(self.score)"
+                self.scoreLabel.text = "Score: \(self.score)" // display the new score
+            }
+            else{
+                print("you thought mia")
+            }
+        }
+        
+        // When movement is complete, we want to remove the twotter from the scene (VERY IMPORTANT)
+        let actionMoveDone = SKAction.removeFromParent()
+
+        
+        // ok, set this new t53 node in motion with all of the actions we defined above
+        t53.run(SKAction.sequence([actionMove, checkPass, actionMoveDone]))
     }
     
     // User touched the screen to throw a rock, let's determine what to do from here...
@@ -415,6 +485,17 @@ class GameScene: SKScene {
     func twotterDidCollideWithfalcon(twotter: SKSpriteNode, falcon: SKSpriteNode) {
         print("Hit twotter")
         twotter.removeFromParent()
+        
+        let reveal = SKTransition.crossFade(withDuration: 3)
+        let gameOverScene = GameOverScene(size: self.size)
+        view?.presentScene(gameOverScene, transition: reveal)
+        
+    }
+    
+    // Here, we respond to a collision between the t53 and falcon.
+    func twotterDidCollideWithfalcon(t53: SKSpriteNode, falcon: SKSpriteNode) {
+        print("Hit t53")
+        t53.removeFromParent()
         
         let reveal = SKTransition.crossFade(withDuration: 3)
         let gameOverScene = GameOverScene(size: self.size)
@@ -462,6 +543,16 @@ extension GameScene: SKPhysicsContactDelegate {
             if let twotter = firstBody.node as? SKSpriteNode,
                let falcon = secondBody.node as? SKSpriteNode {
                 twotterDidCollideWithfalcon(twotter: twotter, falcon: falcon)
+            }
+        }
+        
+        // respond if we determine that the t53 and the falcon made contact
+        if ((firstBody.categoryBitMask & PhysicsCategory.twotter == firstBody.categoryBitMask) &&
+            (secondBody.categoryBitMask & PhysicsCategory.falcon == secondBody.categoryBitMask)) {
+            
+            if let t53 = firstBody.node as? SKSpriteNode,
+               let falcon = secondBody.node as? SKSpriteNode {
+                twotterDidCollideWithfalcon(t53: t53, falcon: falcon)
             }
         }
         
