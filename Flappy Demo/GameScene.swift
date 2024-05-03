@@ -145,7 +145,7 @@ class GameScene: SKScene {
         scoreLabel.position = CGPoint(x: size.width * 0.9, y: size.height * 0.9) // Adjusted position
         scoreLabel.zPosition = 10 // Ensure it is above other nodes
         scoreLabel.horizontalAlignmentMode = .right
-        scoreLabel.text = "Score: 0000"
+        scoreLabel.text = "Score: \(0)"
         
         let scoreOutline = SKLabelNode(fontNamed: "AmericanTypewriter-Bold")
         scoreOutline.fontSize = timerLabel.fontSize
@@ -204,7 +204,7 @@ class GameScene: SKScene {
         bg.anchorPoint = CGPoint.zero
         
         bg.position = CGPoint(x: size.width / 2, y: size.height / 2)
-//        bg.size = CGSize(width: size.width * 5, height: size.height)
+//      bg.size = CGSize(width: size.width * 5, height: size.height)
         bg.zPosition = 1
         let scale =  frame.size.height/bg.size.height
         bg.setScale(scale)
@@ -302,12 +302,13 @@ class GameScene: SKScene {
         let actionMove = SKAction.move(to: CGPoint(x: 0 - glider.size.width, y: glider.position.y), duration: TimeInterval(4)) // takes 4 seconds for the glider to cross the screen (slow)
         
         
-        
         // When movement is complete, we want to remove the glider from the scene (VERY IMPORTANT)
         let actionMoveDone = SKAction.removeFromParent()
         
         
         // ADD SCORE INCREMENTER HERE
+        
+        
         
         
         // ok, set this new glider node in motion with all of the actions we dfined above
@@ -359,7 +360,15 @@ class GameScene: SKScene {
         
         let actionMove = SKAction.move(to: CGPoint(x: 0 - twotter.size.width, y: twotter.position.y), duration: TimeInterval(3)) // takes 3 seconds for the twotter to cross the screen (slow)
         
-        
+        let checkPass = SKAction.run{
+            if twotter.parent != nil{
+                self.score += 1
+                self.scoreLabel.text = "Score: \(self.score)" // display the new score
+            }
+            else{
+                print("you thought mia")
+            }
+        }
         
         // When movement is complete, we want to remove the twotter from the scene (VERY IMPORTANT)
         let actionMoveDone = SKAction.removeFromParent()
@@ -369,7 +378,7 @@ class GameScene: SKScene {
         
         
         // ok, set this new twotter node in motion with all of the actions we dfined above
-        twotter.run(SKAction.sequence([actionMove, actionMoveDone]))
+        twotter.run(SKAction.sequence([actionMove,checkPass,actionMoveDone]))
     }
     
     // User touched the screen to throw a rock, let's determine what to do from here...
