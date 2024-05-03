@@ -76,6 +76,7 @@ class GameScene: SKScene {
     // create the score nodes
     var score = 0
     var scoreLabel: SKLabelNode!
+    var scoreOutline: SKLabelNode!
     
     // create the motion manager
     var motionManager: CMMotionManager!
@@ -145,15 +146,15 @@ class GameScene: SKScene {
         scoreLabel.position = CGPoint(x: size.width * 0.9, y: size.height * 0.9) // Adjusted position
         scoreLabel.zPosition = 10 // Ensure it is above other nodes
         scoreLabel.horizontalAlignmentMode = .right
-        scoreLabel.text = "Score: \(0)"
+        scoreLabel.text = "Score: \(score)"
         
-        let scoreOutline = SKLabelNode(fontNamed: "AmericanTypewriter-Bold")
+        scoreOutline = SKLabelNode(fontNamed: "AmericanTypewriter-Bold")
         scoreOutline.fontSize = timerLabel.fontSize
         scoreOutline.fontColor = SKColor.white
         scoreOutline.position = CGPoint(x: 0, y: 0) // Adjust outline offset
         scoreOutline.zPosition = -1 // Ensure the outline is behind the main text
         scoreOutline.horizontalAlignmentMode = .right
-        scoreOutline.text = "Score: 0000"
+        scoreOutline.text = "Score: \(score)"
         
         scoreLabel.addChild(scoreOutline) // Add outline as a child of the main label to keep them aligned
         addChild(scoreLabel) // Add the main label to the scene
@@ -301,18 +302,24 @@ class GameScene: SKScene {
         
         let actionMove = SKAction.move(to: CGPoint(x: 0 - glider.size.width, y: glider.position.y), duration: TimeInterval(4)) // takes 4 seconds for the glider to cross the screen (slow)
         
+        // score increases if falcon passes the glider
+        let checkPass = SKAction.run{
+            if glider.parent != nil{
+                self.score += 1
+                self.scoreOutline.text = "Score: \(self.score)"
+                self.scoreLabel.text = "Score: \(self.score)" // display the new score
+            }
+            else{
+                print("you thought mia")
+            }
+        }
         
         // When movement is complete, we want to remove the glider from the scene (VERY IMPORTANT)
         let actionMoveDone = SKAction.removeFromParent()
         
         
-        // ADD SCORE INCREMENTER HERE
-        
-        
-        
-        
         // ok, set this new glider node in motion with all of the actions we dfined above
-        glider.run(SKAction.sequence([actionMove, actionMoveDone]))
+        glider.run(SKAction.sequence([actionMove, checkPass, actionMoveDone]))
     }
     
     func addTwotter() {
@@ -360,9 +367,11 @@ class GameScene: SKScene {
         
         let actionMove = SKAction.move(to: CGPoint(x: 0 - twotter.size.width, y: twotter.position.y), duration: TimeInterval(3)) // takes 3 seconds for the twotter to cross the screen (slow)
         
+        // score increases if falcon passes the twotter
         let checkPass = SKAction.run{
             if twotter.parent != nil{
                 self.score += 1
+                self.scoreOutline.text = "Score: \(self.score)"
                 self.scoreLabel.text = "Score: \(self.score)" // display the new score
             }
             else{
@@ -372,9 +381,7 @@ class GameScene: SKScene {
         
         // When movement is complete, we want to remove the twotter from the scene (VERY IMPORTANT)
         let actionMoveDone = SKAction.removeFromParent()
-        
-        
-        // ADD SCORE INCREMENTER HERE
+
         
         
         // ok, set this new twotter node in motion with all of the actions we dfined above
