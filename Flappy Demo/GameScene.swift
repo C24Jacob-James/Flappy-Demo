@@ -56,14 +56,13 @@ class GameScene: SKScene {
     struct PhysicsCategory {
         static let none      : UInt32   = 0
         static let all       : UInt32   = UInt32.max
-        static let glider   : UInt32    = 0b1
-        static let twotter: UInt32   = 0b10
-        static let falcon: UInt32       = 0b100
+        static let glider    : UInt32   = 0b1
+        static let twotter   : UInt32   = 0b10
+        static let falcon    : UInt32    = 0b100
     }
     
-    //create the falcon node and score variables
+    //create the falcon node
     let falcon = SKSpriteNode(imageNamed: "falcon")
-    var score = 0
     
     // create the background nodes
     var background1: SKSpriteNode!
@@ -74,7 +73,9 @@ class GameScene: SKScene {
     var elapsedTime: TimeInterval = 0
     var lastUpdateTime: TimeInterval = 0
     
-    //    let stars = SKEmitterNode(fileNamed: "Stars")!
+    // create the score nodes
+    var score = 0
+    var scoreLabel: SKLabelNode!
     
     // create the motion manager
     var motionManager: CMMotionManager!
@@ -95,6 +96,9 @@ class GameScene: SKScene {
         
         // start the timer
         setupTimerLabel()
+        
+        // track the score
+        setupScoreLabel()
         
         super.didMove(to: view)
         
@@ -132,6 +136,27 @@ class GameScene: SKScene {
             ])
         ))
         
+    }
+    
+    func setupScoreLabel(){
+        scoreLabel = SKLabelNode(fontNamed: "AmericanTypewriter-Bold") // Assuming the bold version is correctly named
+        scoreLabel.fontSize = 30 // Set font size to 60
+        scoreLabel.fontColor = SKColor.black // Text color is white
+        scoreLabel.position = CGPoint(x: size.width * 0.9, y: size.height * 0.9) // Adjusted position
+        scoreLabel.zPosition = 10 // Ensure it is above other nodes
+        scoreLabel.horizontalAlignmentMode = .right
+        scoreLabel.text = "Score: 0000"
+        
+        let scoreOutline = SKLabelNode(fontNamed: "AmericanTypewriter-Bold")
+        scoreOutline.fontSize = timerLabel.fontSize
+        scoreOutline.fontColor = SKColor.white
+        scoreOutline.position = CGPoint(x: 0, y: 0) // Adjust outline offset
+        scoreOutline.zPosition = -1 // Ensure the outline is behind the main text
+        scoreOutline.horizontalAlignmentMode = .right
+        scoreOutline.text = "Score: 0000"
+        
+        scoreLabel.addChild(scoreOutline) // Add outline as a child of the main label to keep them aligned
+        addChild(scoreLabel) // Add the main label to the scene
     }
     
     
