@@ -86,7 +86,7 @@ class HomeScene: SKScene{
     }
     
     func addClouds(){
-        for _ in 0..<50{ // 30 clouds, hopefully covers the whole screen
+        for _ in 0..<100{ // 30 clouds, hopefully covers the whole screen
             let cloud = createCloud()
             addChild(cloud)
         }

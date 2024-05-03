@@ -484,7 +484,7 @@ class GameScene: SKScene {
         
         // setup an action to move the twotter from the right to the left, within a certian frame of time.
         
-        let actionMove = SKAction.move(to: CGPoint(x: 0 - t53.size.width, y: t53.position.y), duration: TimeInterval(3)) // takes 3 seconds for the twotter to cross the screen (slow)
+        let actionMove = SKAction.move(to: CGPoint(x: 0 - t53.size.width, y: t53.position.y), duration: TimeInterval(2)) // takes 2 seconds for the twotter to cross the screen (slow)
         
         // score increases if falcon passes the twotter
         let checkPass = SKAction.run{
