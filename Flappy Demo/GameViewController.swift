@@ -1,6 +1,8 @@
 /* Name: Jacob M. James & Angelica M. Noyola
 * Assignment: Final Project - Flappy Falcon
 * Documentation Stmt:
+    
+    Chat GPT generated the following images: Flappy Falcon, Twin Otter Plane, Glider, T-53 Plane, and the clouds.
  
     We used Chat GPT to make it so that GameOverScene does not go away until the user touches the screen: https://chat.openai.com/share/38f4bf91-c46e-4436-9947-f9ac5238e7bd
  
@@ -13,6 +15,11 @@
     Chat GPT helped us make move the background image to create an infinite scrolling effect: https://chat.openai.com/share/d44787b7-d022-4af1-b00d-9d4eb0cf7f89
  
     Chat GPT helped me identify where the best place was to implement code that identified if the falcon did not hit the plane and the plane passed across the screen: https://chat.openai.com/share/0fa3b657-e287-41c0-b403-f99e391d5c81
+ 
+    Chat GPT helped me make the clouds flow into the home screen after the user pressed on the flappy falcon, we had a lot of back and forth but we eventually succeeded: https://chat.openai.com/share/8aa29ed8-e553-4766-b1db-ca9adcb2ff92
+ 
+
+ }
 */
 
 

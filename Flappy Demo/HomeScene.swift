@@ -93,20 +93,47 @@ class HomeScene: SKScene{
     }
     
     func animateClouds(completion: @escaping () -> Void){
-        let duration = 3.0 // duration for clouds to cover the screen
+        let duration = 2.5 // duration for clouds to cover the screen
+        let pauseDuration = 3.0 // how long clouds stay on the screen
+        
         children.forEach{ node in
             if let cloud = node as? SKSpriteNode, cloud.name == "cloud" {
                 // generate a random x endpoint within the screen bounds
                 let randomX = CGFloat.random(in: 0...size.width)
                 let endPosition = CGPoint( x: randomX, y: cloud.position.y)
                 let moveAction = SKAction.move(to: endPosition, duration: duration)
-                cloud.run(moveAction)
-                print("the clouds are moving!")
+                let pause = SKAction.wait(forDuration: pauseDuration)
+                let sequence = SKAction.sequence([moveAction, pause])
+                cloud.run(sequence)
             }
             
         }
         
-        run(SKAction.wait(forDuration: duration), completion:completion)
+        run(SKAction.wait(forDuration: duration + pauseDuration), completion:completion)
+    }
+    
+    func prepareGameScene() -> SKScene {
+        let gameScene = GameScene(size: size)
+        gameScene.scaleMode = scaleMode
+        return gameScene
+    }
+    
+    func clearClouds(){
+        let duration = 2.5 // duration for clouds to move out
+        for node in children {
+                if let cloud = node as? SKSpriteNode, cloud.name == "cloud" {
+                    let moveDirection = Bool.random() ? 1: -1 // randomly decide the clearing direciton
+                    let endPositionX = moveDirection > 0 ? size.width + cloud.size.width : -cloud.size.width
+                    let moveOut = SKAction.move(to: CGPoint(x: endPositionX, y: cloud.position.y), duration: duration)
+                    cloud.run(moveOut)
+                }
+            }
+        
+//        // After clouds clear, transition to the game scene
+//            run(SKAction.wait(forDuration: duration)) {
+//                self.view?.presentScene(gameScene, transition: SKTransition.crossFade(withDuration: 1.0))
+//            }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -117,7 +144,12 @@ class HomeScene: SKScene{
                 if node.name == "falcon" {
                     // start cloud animation and then transition
                     animateClouds {
+                        //let gameScene = self.prepareGameScene()
+                        //self.clearCloudsAndShowGameScene(gameScene: gameScene)
                         self.transitionToGameScene()
+                        self.run(SKAction.wait(forDuration: 1.0)){
+                            self.clearClouds()
+                        }
                     }
                 }
             }
@@ -125,8 +157,9 @@ class HomeScene: SKScene{
     }
         
     private func transitionToGameScene() {
-        let transition = SKTransition.fade(withDuration: 1.0)
+        //let transition = SKTransition.fade(withDuration: 1.0)
         let gameScene = GameScene(size: self.size)
-        self.view?.presentScene(gameScene, transition: transition)
+        gameScene.scaleMode = .aspectFill
+        self.view?.presentScene(gameScene)
     }
 }
