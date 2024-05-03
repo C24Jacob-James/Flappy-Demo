@@ -105,6 +105,9 @@ class GameScene: SKScene {
         // track the score
         setupScoreLabel()
         
+        // put the pause button
+        setUpPauseButton()
+        
         super.didMove(to: view)
         
         // Initialize and start the motion manager
@@ -171,22 +174,30 @@ class GameScene: SKScene {
             }
     }
     
+    func setUpPauseButton(){
+        let pause = SKSpriteNode(imageNamed: "pause")
+        pause.size = CGSize(width: size.width * 0.08, height: size.width * 0.11)
+        pause.zPosition = 4
+        pause.position = CGPoint(x: size.width * 0.9, y: size.height * 0.93)
+        addChild(pause)
+    }
+    
     func setupScoreLabel(){
         scoreLabel = SKLabelNode(fontNamed: "AmericanTypewriter-Bold") // Assuming the bold version is correctly named
-        scoreLabel.fontSize = 30 // Set font size to 60
+        scoreLabel.fontSize = 60 // Set font size to 60
         scoreLabel.fontColor = SKColor.black // Text color is white
-        scoreLabel.position = CGPoint(x: size.width * 0.9, y: size.height * 0.9) // Adjusted position
+        scoreLabel.position = CGPoint(x: size.width * 0.5, y: size.height * 0.9) // Adjusted position
         scoreLabel.zPosition = 10 // Ensure it is above other nodes
         scoreLabel.horizontalAlignmentMode = .right
-        scoreLabel.text = "Score: \(score)"
+        scoreLabel.text = "\(score)"
         
         scoreOutline = SKLabelNode(fontNamed: "AmericanTypewriter-Bold")
-        scoreOutline.fontSize = timerLabel.fontSize
+        scoreOutline.fontSize = scoreLabel.fontSize
         scoreOutline.fontColor = SKColor.white
         scoreOutline.position = CGPoint(x: 0, y: 0) // Adjust outline offset
         scoreOutline.zPosition = -1 // Ensure the outline is behind the main text
         scoreOutline.horizontalAlignmentMode = .right
-        scoreOutline.text = "Score: \(score)"
+        scoreOutline.text = "\(score)"
         
         scoreLabel.addChild(scoreOutline) // Add outline as a child of the main label to keep them aligned
         addChild(scoreLabel) // Add the main label to the scene
@@ -195,9 +206,10 @@ class GameScene: SKScene {
     
     func setupTimerLabel() {
         timerLabel = SKLabelNode(fontNamed: "AmericanTypewriter-Bold") // Assuming the bold version is correctly named
-        timerLabel.fontSize = 30 // Set font size to 60
+        timerLabel.fontSize = 20 // Set font size to 60
         timerLabel.fontColor = SKColor.black // Text color is white
-        timerLabel.position = CGPoint(x: size.width * 0.1, y: size.height * 0.9) // Adjusted position
+        //timerLabel.position = CGPoint(x: size.width * 0.1, y: size.height * 0.9) // Adjusted position
+        timerLabel.position = CGPoint(x: size.width * 0.84, y: size.height * 0.875)
         timerLabel.zPosition = 5 // Ensure it is above other nodes
         timerLabel.horizontalAlignmentMode = .left
         timerLabel.text = "Time: 0.0"
@@ -206,7 +218,8 @@ class GameScene: SKScene {
         let outline = SKLabelNode(fontNamed: "AmericanTypewriter-Bold")
         outline.fontSize = timerLabel.fontSize
         outline.fontColor = SKColor.white
-        outline.position = CGPoint(x: 0, y: 0) // Adjust outline offset
+        //outline.position = CGPoint(x: 0, y: 0) // Adjust outline offset
+        outline.position = CGPoint(x: size.width * 0.84, y: size.height * 0.875)
         outline.zPosition = -1 // Ensure the outline is behind the main text
         outline.horizontalAlignmentMode = .left
         outline.text = "Time: 0.0"
@@ -343,8 +356,10 @@ class GameScene: SKScene {
         let checkPass = SKAction.run{
             if glider.parent != nil{
                 self.score += 1
-                self.scoreOutline.text = "Score: \(self.score)"
-                self.scoreLabel.text = "Score: \(self.score)" // display the new score
+                self.scoreOutline.text = "\(self.score)"
+                self.scoreLabel.text = "\(self.score)" // display the new score
+                print("cleared the glider")
+
             }
             else{
                 print("you thought mia")
@@ -408,8 +423,10 @@ class GameScene: SKScene {
         let checkPass = SKAction.run{
             if twotter.parent != nil{
                 self.score += 1
-                self.scoreOutline.text = "Score: \(self.score)"
-                self.scoreLabel.text = "Score: \(self.score)" // display the new score
+                self.scoreOutline.text = "\(self.score)"
+                self.scoreLabel.text = "\(self.score)" // display the new score
+                print("cleared the twotter")
+
             }
             else{
                 print("you thought mia")
@@ -473,8 +490,9 @@ class GameScene: SKScene {
         let checkPass = SKAction.run{
             if t53.parent != nil{
                 self.score += 1
-                self.scoreOutline.text = "Score: \(self.score)"
-                self.scoreLabel.text = "Score: \(self.score)" // display the new score
+                self.scoreOutline.text = "\(self.score)"
+                self.scoreLabel.text = "\(self.score)" // display the new score
+                print("cleared the t53")
             }
             else{
                 print("you thought mia")
