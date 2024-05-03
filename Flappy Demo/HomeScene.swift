@@ -64,29 +64,41 @@ class HomeScene: SKScene{
     }
     
     func createCloud() -> SKSpriteNode{
-        let cloud = SKSpriteNode(imageNamed: "cloud1")
-        cloud.position = CGPoint(x: cloud.size.width, y: CGFloat.random(in: 0...size.height))
+        //let cloud = SKSpriteNode(imageNamed: "cloud1")
+        let cloudImages = ["cloud1", "cloud2", "cloud3", "cloud4"]
+        let randomIndex = Int(arc4random_uniform(UInt32(cloudImages.count)))
+        let cloud = SKSpriteNode(imageNamed: cloudImages[randomIndex])
+        cloud.size = CGSize(width: size.width * 0.5, height: size.width * 0.6)
+        // putting it to the far right of the screen ... tbadjusted for positiong on both the right and left side of the screen
+//        cloud.position = CGPoint(x: size.width + cloud.size.width / 2, y: CGFloat.random(in: 0...size.height))
+        
+        // randomly decide if the cloud starts from the left or right
+        let startsFromRight = Bool.random()
+        let startPositionX = startsFromRight ? size.width + cloud.size.width / 2 : -cloud.size.width / 2
+        let moveDirectionMultiplier: CGFloat = startsFromRight ? -1 : 1  // Determines direction of movement
+        
+        cloud.position = CGPoint(x: startPositionX, y: CGFloat.random(in: 100...size.height - 100))
+        //cloud.position = CGPoint(x: size.width + cloud.size.width / 2, y: CGFloat.random(in: 100...size.height-100))
         cloud.zPosition = 25
         cloud.alpha = 1 // start invisisble or offscreen
-        print("the cloud was made")
-        cloud.name = "cloud1"
-        
+        cloud.name = "cloud"
         return cloud
     }
     
     func addClouds(){
-        for _ in 0..<5{ // 5 clouds
+        for _ in 0..<50{ // 30 clouds, hopefully covers the whole screen
             let cloud = createCloud()
             addChild(cloud)
-            print("the cloud was added")
         }
     }
     
     func animateClouds(completion: @escaping () -> Void){
-        let duration = 2.5 // duration for clouds to cover the screen
+        let duration = 3.0 // duration for clouds to cover the screen
         children.forEach{ node in
-            if let cloud = node as? SKSpriteNode, cloud.name == "cloud1" {
-                let endPosition = CGPoint( x: -cloud.size.width, y: cloud.position.y)
+            if let cloud = node as? SKSpriteNode, cloud.name == "cloud" {
+                // generate a random x endpoint within the screen bounds
+                let randomX = CGFloat.random(in: 0...size.width)
+                let endPosition = CGPoint( x: randomX, y: cloud.position.y)
                 let moveAction = SKAction.move(to: endPosition, duration: duration)
                 cloud.run(moveAction)
                 print("the clouds are moving!")
