@@ -84,6 +84,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        
         // Initialize and set up backgrounds
         background1 = createBackground()
         background1.position = CGPoint(x: 0, y: 0)

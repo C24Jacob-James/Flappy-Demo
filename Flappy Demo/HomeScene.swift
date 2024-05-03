@@ -10,7 +10,6 @@ import SpriteKit
 
 class HomeScene: SKScene{
     override func didMove(to view: SKView){
-        //backgroundColor = .white // Or any appropriate background color
         let backgroundColor = SKSpriteNode(imageNamed: "mountains")
         backgroundColor.position = CGPoint(x: frame.midX, y: frame.midY)
         backgroundColor.zPosition = -1  // Ensure it stays in the background
@@ -29,7 +28,7 @@ class HomeScene: SKScene{
         
         let startGameLabel = SKLabelNode(fontNamed: "Courier")
         startGameLabel.text = "Tap Flappy Falcon to Take Flight"
-        startGameLabel.fontSize = 30
+        startGameLabel.fontSize = 25
         startGameLabel.fontColor = .white
         startGameLabel.position = CGPoint(x: frame.midX, y: frame.midY - 300)
         addChild(startGameLabel)
@@ -59,6 +58,43 @@ class HomeScene: SKScene{
         // Run the action
         bigFalcon.run(repeatBounce)
         
+        addClouds()
+        
+        
+    }
+    
+    func createCloud() -> SKSpriteNode{
+        let cloud = SKSpriteNode(imageNamed: "cloud1")
+        cloud.position = CGPoint(x: cloud.size.width, y: CGFloat.random(in: 0...size.height))
+        cloud.zPosition = 25
+        cloud.alpha = 1 // start invisisble or offscreen
+        print("the cloud was made")
+        cloud.name = "cloud1"
+        
+        return cloud
+    }
+    
+    func addClouds(){
+        for _ in 0..<5{ // 5 clouds
+            let cloud = createCloud()
+            addChild(cloud)
+            print("the cloud was added")
+        }
+    }
+    
+    func animateClouds(completion: @escaping () -> Void){
+        let duration = 2.5 // duration for clouds to cover the screen
+        children.forEach{ node in
+            if let cloud = node as? SKSpriteNode, cloud.name == "cloud1" {
+                let endPosition = CGPoint( x: -cloud.size.width, y: cloud.position.y)
+                let moveAction = SKAction.move(to: endPosition, duration: duration)
+                cloud.run(moveAction)
+                print("the clouds are moving!")
+            }
+            
+        }
+        
+        run(SKAction.wait(forDuration: duration), completion:completion)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -67,7 +103,10 @@ class HomeScene: SKScene{
             let nodes = self.nodes(at: location)
             for node in nodes {
                 if node.name == "falcon" {
-                    transitionToGameScene()
+                    // start cloud animation and then transition
+                    animateClouds {
+                        self.transitionToGameScene()
+                    }
                 }
             }
         }
