@@ -114,9 +114,7 @@ class GameScene: SKScene {
         
         
         createfalcon()
-//        addMountains()
-        
-        
+
         
         // we're in space - so no gravity
         physicsWorld.gravity = CGVector(dx: 0, dy: -10)
@@ -493,7 +491,7 @@ class GameScene: SKScene {
     }
     
     // Here, we respond to a collision between the t53 and falcon.
-    func twotterDidCollideWithfalcon(t53: SKSpriteNode, falcon: SKSpriteNode) {
+    func t53DidCollideWithfalcon(t53: SKSpriteNode, falcon: SKSpriteNode) {
         print("Hit t53")
         t53.removeFromParent()
         
@@ -547,12 +545,12 @@ extension GameScene: SKPhysicsContactDelegate {
         }
         
         // respond if we determine that the t53 and the falcon made contact
-        if ((firstBody.categoryBitMask & PhysicsCategory.twotter == firstBody.categoryBitMask) &&
+        if ((firstBody.categoryBitMask & PhysicsCategory.t53 == firstBody.categoryBitMask) &&
             (secondBody.categoryBitMask & PhysicsCategory.falcon == secondBody.categoryBitMask)) {
             
             if let t53 = firstBody.node as? SKSpriteNode,
                let falcon = secondBody.node as? SKSpriteNode {
-                twotterDidCollideWithfalcon(t53: t53, falcon: falcon)
+                t53DidCollideWithfalcon(t53: t53, falcon: falcon)
             }
         }
         
