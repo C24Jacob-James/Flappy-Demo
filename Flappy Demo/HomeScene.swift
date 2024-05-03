@@ -160,6 +160,16 @@ class HomeScene: SKScene{
         //let transition = SKTransition.fade(withDuration: 1.0)
         let gameScene = GameScene(size: self.size)
         gameScene.scaleMode = .aspectFill
+        
+        // transfer clouds from home scene to game scene
+        children.forEach { node in
+            if let cloud = node as? SKSpriteNode, cloud.name == "cloud"{
+                node.removeFromParent() // remove from home scene
+                gameScene.addChild(cloud) // add to game scene
+            }
+        }
+        
+        // preseent the game scene while the clouds are still covering the screen
         self.view?.presentScene(gameScene)
     }
 }

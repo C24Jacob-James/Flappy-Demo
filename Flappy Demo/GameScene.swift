@@ -62,6 +62,8 @@ class GameScene: SKScene {
         static let t53       : UInt32   = 0b1000
     }
     
+    var gameReadyToStart = false
+    
     //create the falcon node
     let falcon = SKSpriteNode(imageNamed: "falcon")
     
@@ -128,7 +130,21 @@ class GameScene: SKScene {
         backgroundMusic.autoplayLooped = true
         addChild(backgroundMusic)
         
-        // Now, start the game loop
+//        // Now, start the game loop
+//        run(SKAction.repeatForever(
+//            SKAction.sequence([
+//                SKAction.run(spawnRandomPlane),
+//                //            SKAction.run(showScoreBoard),
+//                SKAction.wait(forDuration: 1.5)     // waits 1.5 seconds before spawning a random plane
+//            ])
+//        ))
+        
+        clearCloudsAndStartGame()
+        
+    }
+    
+    func startGame(){
+        //Now, start the game loop
         run(SKAction.repeatForever(
             SKAction.sequence([
                 SKAction.run(spawnRandomPlane),
@@ -136,7 +152,23 @@ class GameScene: SKScene {
                 SKAction.wait(forDuration: 1.5)     // waits 1.5 seconds before spawning a random plane
             ])
         ))
-        
+    }
+    
+    func clearCloudsAndStartGame(){
+        let duration = 2.5 // duration for clouds to move out
+        for node in children {
+                if let cloud = node as? SKSpriteNode, cloud.name == "cloud" {
+                    let moveDirection = Bool.random() ? 1: -1 // randomly decide the clearing direciton
+                    let endPositionX = moveDirection > 0 ? size.width + cloud.size.width : -cloud.size.width
+                    let moveOut = SKAction.move(to: CGPoint(x: endPositionX, y: cloud.position.y), duration: duration)
+                    cloud.run(moveOut)
+                }
+            }
+        // Ensure all actions complete before starting game activities
+            run(SKAction.wait(forDuration: duration)) {
+                self.gameReadyToStart = true
+                self.startGame()
+            }
     }
     
     func setupScoreLabel(){
@@ -190,7 +222,7 @@ class GameScene: SKScene {
         falcon.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
         //        falcon.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
         falcon.physicsBody = SKPhysicsBody(circleOfRadius: falcon.size.width / 4)
-        falcon.physicsBody?.isDynamic = true
+        falcon.physicsBody?.isDynamic = false
         // belongs to the "falcon category"
         falcon.physicsBody?.categoryBitMask = PhysicsCategory.falcon
         falcon.physicsBody?.contactTestBitMask = PhysicsCategory.falcon
@@ -459,6 +491,12 @@ class GameScene: SKScene {
     
     // User touched the screen to throw a rock, let's determine what to do from here...
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //guard let touch = touches.first, gameReadyToStart else{ return}
+        
+        // Start the game loop only if it hasn't started yet
+//            if !hasActions() { // Check if any actions are running to avoid restarting the game
+//                startGame()
+//            }
         
         // IF WE WANT A SOUND EFFECT WHEN JUMPING, THIS IS WHERE WE INSERT IT
         //    run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
@@ -466,6 +504,14 @@ class GameScene: SKScene {
         // Everytime we touch the screen, there the jumps upward.
         falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
         
+        if gameReadyToStart{
+            if !(falcon.physicsBody?.isDynamic ?? false) {
+                falcon.physicsBody?.isDynamic = true
+                falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
+            }
+        }
+        
+        // FIX THIS MIS
     }
     
     
