@@ -87,8 +87,11 @@ class GameScene: SKScene {
     // set up pause window
     var pauseWindow: SKNode?
     
+    // game over pop up window
+    var isGameOver = false
+    var gameOverWindow: SKNode?
+    
     override func didMove(to view: SKView) {
-        
         
         // Initialize and set up backgrounds
         background1 = createBackground()
@@ -122,10 +125,9 @@ class GameScene: SKScene {
         // set our scene's background color
         backgroundColor = SKColor.skyBlue
         
-        
         createfalcon()
 
-        
+    
         // we're in space - so no gravity
         physicsWorld.gravity = CGVector(dx: 0, dy: -10)
         
@@ -137,16 +139,11 @@ class GameScene: SKScene {
         backgroundMusic.autoplayLooped = true
         addChild(backgroundMusic)
         
-//        // Now, start the game loop
-//        run(SKAction.repeatForever(
-//            SKAction.sequence([
-//                SKAction.run(spawnRandomPlane),
-//                //            SKAction.run(showScoreBoard),
-//                SKAction.wait(forDuration: 1.5)     // waits 1.5 seconds before spawning a random plane
-//            ])
-//        ))
-        
+        // clear the clouds out of the frame and let the planes start coming in
         clearCloudsAndStartGame()
+        
+        // pop up window over the current game scene
+        setUpGameOverWindow()
         
     }
     
@@ -295,21 +292,17 @@ class GameScene: SKScene {
             addGlider()
             print("glider")
         }
-        
         if randomPlane == 2{
             addTwotter()
             print("twotter")
         }
-        
         if randomPlane == 3{
             addT53()
             print("t53")
         }
-        
         else {
             print("shark")
         }
-        
     }
     
     func addGlider() {
@@ -364,7 +357,6 @@ class GameScene: SKScene {
                 self.scoreOutline.text = "\(self.score)"
                 self.scoreLabel.text = "\(self.score)" // display the new score
                 print("cleared the glider")
-
             }
             else{
                 print("you thought mia")
@@ -448,7 +440,7 @@ class GameScene: SKScene {
     
     func addT53(){
         
-        // Create sprite for the glider
+        // Create sprite for the t53
         let t53 = SKSpriteNode(imageNamed: "T53")
         
         
@@ -532,6 +524,62 @@ class GameScene: SKScene {
         }
     }
     
+    func setUpGameOverWindow(){
+        gameOverWindow = SKSpriteNode(color: .white, size: CGSize(width: 300, height: 200))
+        gameOverWindow?.position = CGPoint(x: frame.midX, y: frame.midY)
+        gameOverWindow?.zPosition = 10
+        
+        let gameOverLabel = SKLabelNode(fontNamed: "Courier-Bold")
+        gameOverLabel.text = "Flappy Falcon Died"
+        gameOverLabel.fontSize = 24
+        gameOverLabel.fontColor = .black
+        gameOverLabel.position = CGPoint(x: 0, y: 50)
+        gameOverWindow?.addChild(gameOverLabel)
+
+        let scoreLabel = SKLabelNode(fontNamed: "Courier")
+        scoreLabel.text = "Score: \(score)"  // Update with actual score
+        scoreLabel.fontSize = 20
+        scoreLabel.fontColor = .black
+        scoreLabel.position = CGPoint(x: 0, y: 10)
+        gameOverWindow?.addChild(scoreLabel)
+
+        let newGameButton = SKLabelNode(fontNamed: "Courier")
+        newGameButton.name = "newGame"
+        newGameButton.text = "New Game"
+        newGameButton.fontSize = 18
+        newGameButton.fontColor = .blue
+        newGameButton.position = CGPoint(x: -50, y: -40)
+        gameOverWindow?.addChild(newGameButton)
+
+        let returnHomeButton = SKLabelNode(fontNamed: "Courier")
+        returnHomeButton.name = "returnHome"
+        returnHomeButton.text = "Return to Home"
+        returnHomeButton.fontSize = 18
+        returnHomeButton.fontColor = .blue
+        returnHomeButton.position = CGPoint(x: 50, y: -40)
+        gameOverWindow?.addChild(returnHomeButton)
+    }
+    
+    func handleGameOver(){
+        if let window = gameOverWindow {
+            addChild(window)
+            isGameOver = true
+            self.isPaused = true  // This will freeze the game elements
+        }
+    }
+    
+    func restartGame() {
+        let transition = SKTransition.fade(withDuration: 1.0)  // Use your preferred transition
+        let gameScene = GameScene(size: self.size)
+        self.view?.presentScene(gameScene, transition: transition)
+    }
+
+    func returnToHome() {
+        let transition = SKTransition.fade(withDuration: 1.0)  // Use your preferred transition
+        let homeScene = HomeScene(size: self.size)  // Assuming you have a HomeScene class
+        self.view?.presentScene(homeScene, transition: transition)
+    }
+    
     // User touched the screen to throw a rock, let's determine what to do from here...
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
@@ -539,20 +587,28 @@ class GameScene: SKScene {
         let location = touch?.location(in: self)
         let node = self.atPoint(location!)
         
-        
-        if node.name == "pause" {
-            togglePause()
+        if isGameOver {
+            if node.name == "newGame"{
+                restartGame()
+            } else if node.name == "returnHome"{
+                returnToHome()
+            }
         } else{
-            // Everytime we touch the screen, there the jumps upward.
-            falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
-            
-            if gameReadyToStart{
-                if !(falcon.physicsBody?.isDynamic ?? false) {
-                    falcon.physicsBody?.isDynamic = true
-                    falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
+            if node.name == "pause" {
+                togglePause()
+            } else{
+                // Everytime we touch the screen, there the jumps upward.
+                falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
+                
+                if gameReadyToStart{
+                    if !(falcon.physicsBody?.isDynamic ?? false) {
+                        falcon.physicsBody?.isDynamic = true
+                        falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
+                    }
                 }
             }
         }
+        
     }
     
     
@@ -562,8 +618,9 @@ class GameScene: SKScene {
         glider.removeFromParent()
         
         let reveal = SKTransition.crossFade(withDuration: 3)
-        let gameOverScene = GameOverScene(size: self.size)
-        view?.presentScene(gameOverScene, transition: reveal)
+        //let gameOverScene = GameOverScene(size: self.size)
+        //view?.presentScene(gameOverScene, transition: reveal)
+        handleGameOver()
         
     }
     
@@ -573,8 +630,9 @@ class GameScene: SKScene {
         twotter.removeFromParent()
         
         let reveal = SKTransition.crossFade(withDuration: 3)
-        let gameOverScene = GameOverScene(size: self.size)
-        view?.presentScene(gameOverScene, transition: reveal)
+        //let gameOverScene = GameOverScene(size: self.size)
+        //view?.presentScene(gameOverScene, transition: reveal)
+        handleGameOver()
         
     }
     
@@ -584,8 +642,9 @@ class GameScene: SKScene {
         t53.removeFromParent()
         
         let reveal = SKTransition.crossFade(withDuration: 3)
-        let gameOverScene = GameOverScene(size: self.size)
-        view?.presentScene(gameOverScene, transition: reveal)
+        //let gameOverScene = GameOverScene(size: self.size)
+        //view?.presentScene(gameOverScene, transition: reveal)
+        handleGameOver()
         
     }
     
@@ -673,8 +732,9 @@ extension GameScene: SKPhysicsContactDelegate {
         if (falcon.position.y < 0 || falcon.position.y > size.height) {
               
             let reveal = SKTransition.crossFade(withDuration: 3)
-            let gameOverScene = GameOverScene(size: self.size)
-            view?.presentScene(gameOverScene, transition: reveal)
+            //let gameOverScene = GameOverScene(size: self.size)
+            //view?.presentScene(gameOverScene, transition: reveal)
+            handleGameOver()
 
 //            let gameOverScene = GameOverScene(size: self.size)
 //            view?.presentScene(gameOverScene, transition: reveal)
