@@ -84,6 +84,9 @@ class GameScene: SKScene {
     // create the motion manager
     var motionManager: CMMotionManager!
     
+    // set up pause window
+    var pauseWindow: SKNode?
+    
     override func didMove(to view: SKView) {
         
         
@@ -107,6 +110,7 @@ class GameScene: SKScene {
         
         // put the pause button
         setUpPauseButton()
+        setupPauseWindow()
         
         super.didMove(to: view)
         
@@ -179,6 +183,7 @@ class GameScene: SKScene {
         pause.size = CGSize(width: size.width * 0.08, height: size.width * 0.11)
         pause.zPosition = 4
         pause.position = CGPoint(x: size.width * 0.9, y: size.height * 0.93)
+        pause.name = "pause"
         addChild(pause)
     }
     
@@ -507,29 +512,47 @@ class GameScene: SKScene {
         t53.run(SKAction.sequence([actionMove, checkPass, actionMoveDone]))
     }
     
-    // User touched the screen to throw a rock, let's determine what to do from here...
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //guard let touch = touches.first, gameReadyToStart else{ return}
-        
-        // Start the game loop only if it hasn't started yet
-//            if !hasActions() { // Check if any actions are running to avoid restarting the game
-//                startGame()
-//            }
-        
-        // IF WE WANT A SOUND EFFECT WHEN JUMPING, THIS IS WHERE WE INSERT IT
-        //    run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
-        
-        // Everytime we touch the screen, there the jumps upward.
-        falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
-        
-        if gameReadyToStart{
-            if !(falcon.physicsBody?.isDynamic ?? false) {
-                falcon.physicsBody?.isDynamic = true
-                falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
+    func setupPauseWindow() {
+        pauseWindow = SKSpriteNode(color: .gray, size: CGSize(width: 300, height: 200))
+        pauseWindow?.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        pauseWindow?.zPosition = 100
+    }
+    
+    func togglePause(){
+        if self.isPaused{
+            // resume the game
+            self.isPaused = false
+            pauseWindow?.removeFromParent()
+        } else{
+            // pause the game
+            self.isPaused = true
+            if let pauseWindow = pauseWindow{
+                self.addChild(pauseWindow)
             }
         }
+    }
+    
+    // User touched the screen to throw a rock, let's determine what to do from here...
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        // FIX THIS MIS
+        let touch = touches.first
+        let location = touch?.location(in: self)
+        let node = self.atPoint(location!)
+        
+        
+        if node.name == "pause" {
+            togglePause()
+        } else{
+            // Everytime we touch the screen, there the jumps upward.
+            falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
+            
+            if gameReadyToStart{
+                if !(falcon.physicsBody?.isDynamic ?? false) {
+                    falcon.physicsBody?.isDynamic = true
+                    falcon.physicsBody?.velocity = CGVector(dx: 0, dy: 750)
+                }
+            }
+        }
     }
     
     
