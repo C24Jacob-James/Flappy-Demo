@@ -113,7 +113,6 @@ class GameScene: SKScene {
         
         // put the pause button
         setUpPauseButton()
-        setupPauseWindow()
         
         super.didMove(to: view)
         
@@ -503,11 +502,55 @@ class GameScene: SKScene {
         t53.run(SKAction.sequence([actionMove, checkPass, actionMoveDone]))
     }
     
+    
     func setupPauseWindow() {
-        pauseWindow = SKSpriteNode(color: .gray, size: CGSize(width: 300, height: 200))
-        pauseWindow?.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        pauseWindow?.zPosition = 100
+        // Define a linear gradient that transitions from white in the center to sky blue in the corners
+        let gradient = SKShader(source: """
+            void main() {
+                vec2 coord = v_tex_coord - vec2(0.5, 0.5); // Centered and normalized to -0.5 to 0.5
+                float maxDist = 0.5; // Maximum distance from center to corners
+                float dist = max(abs(coord.x), abs(coord.y)); // Compute distance to the nearest edge
+                vec4 innerColor = vec4(1.0, 1.0, 1.0, 1.0); // White center
+                vec4 outerColor = vec4(0.529, 0.808, 1.0, 1.0); // Sky blue at edges
+                gl_FragColor = mix(innerColor, outerColor, smoothstep(0.3, 0.5, dist)); // Gradually mix to blue towards the edges
+            }
+        """)
+
+        // Create the rounded gradient background node
+        let gradientNode = SKShapeNode(rect: CGRect(x: -175, y: -125, width: 350, height: 250), cornerRadius: 20)
+        gradientNode.fillShader = gradient
+        gradientNode.strokeColor = SKColor.black // Thick black border
+        gradientNode.lineWidth = 10
+        gradientNode.zPosition = 9
+
+        // Create the pause window frame
+        pauseWindow = SKSpriteNode(color: .clear, size: CGSize(width: 350, height: 250))
+        pauseWindow?.position = CGPoint(x: frame.midX, y: frame.midY)
+        pauseWindow?.zPosition = 10
+        pauseWindow?.addChild(gradientNode)
+
+        // Styling the "Game Paused" label
+        let pauseLabel = SKLabelNode(fontNamed: "Courier-Bold")
+        pauseLabel.text = "Game Paused"
+        pauseLabel.fontSize = 24
+        pauseLabel.fontColor = SKColor.black
+        pauseLabel.position = CGPoint(x: 0, y: 40) // Adjusted position for larger size
+        pauseLabel.zPosition = 11
+        pauseWindow?.addChild(pauseLabel)
+
+        // Styling the score label
+        let scoreLabel = SKLabelNode(fontNamed: "Courier")
+        scoreLabel.text = "Current Score: \(score)"  // Update with actual score
+        scoreLabel.fontSize = 20
+        scoreLabel.fontColor = SKColor.black
+        scoreLabel.position = CGPoint(x: 0, y: -50) // Adjusted position for larger size
+        scoreLabel.zPosition = 12
+        pauseWindow?.addChild(scoreLabel)
     }
+
+
+
+
     
     func togglePause(){
         if self.isPaused{
@@ -517,6 +560,7 @@ class GameScene: SKScene {
         } else{
             // pause the game
             self.isPaused = true
+            setupPauseWindow()
             if let pauseWindow = pauseWindow{
                 self.addChild(pauseWindow)
             }
@@ -526,13 +570,34 @@ class GameScene: SKScene {
     func setUpGameOverWindow(){
         gameOverWindow = SKSpriteNode(color: .white, size: CGSize(width: 300, height: 200))
         gameOverWindow?.position = CGPoint(x: frame.midX, y: frame.midY)
-        gameOverWindow?.zPosition = 10
+        gameOverWindow?.zPosition = 11
+        
+        // Define a linear gradient that transitions from white in the center to sky blue in the corners
+        let gradient = SKShader(source: """
+            void main() {
+                vec2 coord = v_tex_coord - vec2(0.5, 0.5); // Centered and normalized to -0.5 to 0.5
+                float maxDist = 0.5; // Maximum distance from center to corners
+                float dist = max(abs(coord.x), abs(coord.y)); // Compute distance to the nearest edge
+                vec4 innerColor = vec4(1.0, 1.0, 1.0, 1.0); // White center
+                vec4 outerColor = vec4(0.529, 0.808, 1.0, 1.0); // Sky blue at edges
+                gl_FragColor = mix(innerColor, outerColor, smoothstep(0.3, 0.5, dist)); // Gradually mix to blue towards the edges
+            }
+        """)
+
+        // Create the rounded gradient background node
+        let gradientNode = SKShapeNode(rect: CGRect(x: -175, y: -125, width: 350, height: 250), cornerRadius: 20)
+        gradientNode.fillShader = gradient
+        gradientNode.strokeColor = SKColor.black // Thick black border
+        gradientNode.lineWidth = 10
+        gradientNode.zPosition = 10
+        gameOverWindow?.addChild(gradientNode)
         
         let gameOverLabel = SKLabelNode(fontNamed: "Courier-Bold")
         gameOverLabel.text = "Flappy Falcon Died"
         gameOverLabel.fontSize = 24
         gameOverLabel.fontColor = .black
         gameOverLabel.position = CGPoint(x: 0, y: 50)
+        gameOverLabel.zPosition = 12
         gameOverWindow?.addChild(gameOverLabel)
 
         let scoreLabel = SKLabelNode(fontNamed: "Courier")
@@ -540,6 +605,7 @@ class GameScene: SKScene {
         scoreLabel.fontSize = 20
         scoreLabel.fontColor = .black
         scoreLabel.position = CGPoint(x: 0, y: 10)
+        scoreLabel.zPosition = 13
         gameOverWindow?.addChild(scoreLabel)
         
         let highScoreLabel = SKLabelNode(fontNamed: "Courier")
@@ -547,6 +613,7 @@ class GameScene: SKScene {
         highScoreLabel.fontSize = 20
         highScoreLabel.fontColor = .black
         highScoreLabel.position = CGPoint(x: 0, y: -20)
+        highScoreLabel.zPosition = 14
         gameOverWindow?.addChild(highScoreLabel)
 
         let newGameButton = SKLabelNode(fontNamed: "Courier")
@@ -555,6 +622,7 @@ class GameScene: SKScene {
         newGameButton.fontSize = 18
         newGameButton.fontColor = .blue
         newGameButton.position = CGPoint(x: -90, y: -60)
+        newGameButton.zPosition = 15
         gameOverWindow?.addChild(newGameButton)
 
         let returnHomeButton = SKLabelNode(fontNamed: "Courier")
@@ -563,6 +631,7 @@ class GameScene: SKScene {
         returnHomeButton.fontSize = 18
         returnHomeButton.fontColor = .blue
         returnHomeButton.position = CGPoint(x: 50, y: -60)
+        returnHomeButton.zPosition = 15
         gameOverWindow?.addChild(returnHomeButton)
     }
     

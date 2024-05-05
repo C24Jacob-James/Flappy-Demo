@@ -8,16 +8,17 @@
  
     Used Chat GPT to generate the loading screen - blue sky gradient, and helped me set up and organize my loading screen. Including the code to make the falcon fly across the screen: https://chat.openai.com/share/6c073900-b947-46f9-9960-c9cc824e16e0
  
-    Chat GPT helped me fix the home screen background image, before it was really really squished together and it was difficult adjusting it to fit normally on the screen, chat chpt gave me the formual to adjust the size of the image by adjusting the scale of the home screen image. https://chat.openai.com/share/1c43a61e-260d-420f-a1c0-4647dd582b92
+    Chat GPT helped us fix the home screen background image, before it was really really squished together and it was difficult adjusting it to fit normally on the screen, chat chpt gave me the formual to adjust the size of the image by adjusting the scale of the home screen image. https://chat.openai.com/share/1c43a61e-260d-420f-a1c0-4647dd582b92
  
     Chat GPT helped me adjust the fonts of the homescreen, as well as helped me figure out how to make the falcon bounce on the home screen: https://chat.openai.com/share/4cba7db0-e79f-4586-91cd-ccf53185f9d9
     
     Chat GPT helped us make move the background image to create an infinite scrolling effect: https://chat.openai.com/share/d44787b7-d022-4af1-b00d-9d4eb0cf7f89
  
-    Chat GPT helped me identify where the best place was to implement code that identified if the falcon did not hit the plane and the plane passed across the screen: https://chat.openai.com/share/0fa3b657-e287-41c0-b403-f99e391d5c81
+    Chat GPT helped us identify where the best place was to implement code that identified if the falcon did not hit the plane and the plane passed across the screen: https://chat.openai.com/share/0fa3b657-e287-41c0-b403-f99e391d5c81
  
-    Chat GPT helped me make the clouds flow into the home screen after the user pressed on the flappy falcon, we had a lot of back and forth but we eventually succeeded: https://chat.openai.com/share/8aa29ed8-e553-4766-b1db-ca9adcb2ff92
+    Chat GPT helped us make the clouds flow into the home screen after the user pressed on the flappy falcon, we had a lot of back and forth but we eventually succeeded: https://chat.openai.com/share/8aa29ed8-e553-4766-b1db-ca9adcb2ff92
  
+    Chat GPT helped us write the code to make the high score persist accross game sessions: https://chat.openai.com/share/520b02db-248b-4c29-a9be-62dc9bed7058
 
  }
 */
