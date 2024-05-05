@@ -142,8 +142,7 @@ class GameScene: SKScene {
         // clear the clouds out of the frame and let the planes start coming in
         clearCloudsAndStartGame()
         
-        // pop up window over the current game scene
-        setUpGameOverWindow()
+
         
     }
     
@@ -290,18 +289,18 @@ class GameScene: SKScene {
         
         if randomPlane == 1{
             addGlider()
-            print("glider")
+//            print("glider")
         }
         if randomPlane == 2{
             addTwotter()
-            print("twotter")
+//            print("twotter")
         }
         if randomPlane == 3{
             addT53()
-            print("t53")
+//            print("t53")
         }
         else {
-            print("shark")
+//            print("shark")
         }
     }
     
@@ -356,10 +355,10 @@ class GameScene: SKScene {
                 self.score += 1
                 self.scoreOutline.text = "\(self.score)"
                 self.scoreLabel.text = "\(self.score)" // display the new score
-                print("cleared the glider")
+//                print("cleared the glider")
             }
             else{
-                print("you thought mia")
+//                print("you thought mia")
             }
         }
         
@@ -422,11 +421,11 @@ class GameScene: SKScene {
                 self.score += 1
                 self.scoreOutline.text = "\(self.score)"
                 self.scoreLabel.text = "\(self.score)" // display the new score
-                print("cleared the twotter")
+//                print("cleared the twotter")
 
             }
             else{
-                print("you thought mia")
+//                print("you thought mia")
             }
         }
         
@@ -489,10 +488,10 @@ class GameScene: SKScene {
                 self.score += 1
                 self.scoreOutline.text = "\(self.score)"
                 self.scoreLabel.text = "\(self.score)" // display the new score
-                print("cleared the t53")
+//                print("cleared the t53")
             }
             else{
-                print("you thought mia")
+//                print("you thought mia")
             }
         }
         
@@ -542,13 +541,20 @@ class GameScene: SKScene {
         scoreLabel.fontColor = .black
         scoreLabel.position = CGPoint(x: 0, y: 10)
         gameOverWindow?.addChild(scoreLabel)
+        
+        let highScoreLabel = SKLabelNode(fontNamed: "Courier")
+        highScoreLabel.text = "High Score: \(loadHighScore())"  // Update with actual score
+        highScoreLabel.fontSize = 20
+        highScoreLabel.fontColor = .black
+        highScoreLabel.position = CGPoint(x: 0, y: -20)
+        gameOverWindow?.addChild(highScoreLabel)
 
         let newGameButton = SKLabelNode(fontNamed: "Courier")
         newGameButton.name = "newGame"
         newGameButton.text = "New Game"
         newGameButton.fontSize = 18
         newGameButton.fontColor = .blue
-        newGameButton.position = CGPoint(x: -50, y: -40)
+        newGameButton.position = CGPoint(x: -90, y: -60)
         gameOverWindow?.addChild(newGameButton)
 
         let returnHomeButton = SKLabelNode(fontNamed: "Courier")
@@ -556,11 +562,14 @@ class GameScene: SKScene {
         returnHomeButton.text = "Return to Home"
         returnHomeButton.fontSize = 18
         returnHomeButton.fontColor = .blue
-        returnHomeButton.position = CGPoint(x: 50, y: -40)
+        returnHomeButton.position = CGPoint(x: 50, y: -60)
         gameOverWindow?.addChild(returnHomeButton)
     }
     
     func handleGameOver(){
+        saveHighScore(score: score)
+        // pop up window over the current game scene
+        setUpGameOverWindow()
         if let window = gameOverWindow {
             addChild(window)
             isGameOver = true
@@ -580,7 +589,25 @@ class GameScene: SKScene {
         self.view?.presentScene(homeScene, transition: transition)
     }
     
-    // User touched the screen to throw a rock, let's determine what to do from here...
+    
+    // Functions to save high score and timer
+    func saveHighScore(score: Int) {
+        let defaults = UserDefaults.standard
+        // Check if the current score is greater than the saved high score
+        let highScore = defaults.integer(forKey: "highScore")
+        if score > highScore {
+            defaults.set(score, forKey: "highScore")
+        }
+    }
+    
+    func loadHighScore() -> Int {
+        let defaults = UserDefaults.standard
+        return defaults.integer(forKey: "highScore")
+    }
+    
+    
+    
+    // User touched the screen after game ended.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         let touch = touches.first
@@ -614,7 +641,7 @@ class GameScene: SKScene {
     
     // Here, we respond to a collision between glider and falcon.
     func gliderDidCollideWithfalcon(glider: SKSpriteNode, falcon: SKSpriteNode) {
-        print("Hit glider")
+//        print("Hit glider")
         glider.removeFromParent()
         
         let reveal = SKTransition.crossFade(withDuration: 3)
@@ -626,7 +653,7 @@ class GameScene: SKScene {
     
     // Here, we respond to a collision between the twotter and falcon.
     func twotterDidCollideWithfalcon(twotter: SKSpriteNode, falcon: SKSpriteNode) {
-        print("Hit twotter")
+//        print("Hit twotter")
         twotter.removeFromParent()
         
         let reveal = SKTransition.crossFade(withDuration: 3)
@@ -638,7 +665,7 @@ class GameScene: SKScene {
     
     // Here, we respond to a collision between the t53 and falcon.
     func t53DidCollideWithfalcon(t53: SKSpriteNode, falcon: SKSpriteNode) {
-        print("Hit t53")
+//        print("Hit t53")
         t53.removeFromParent()
         
         let reveal = SKTransition.crossFade(withDuration: 3)
@@ -667,8 +694,8 @@ extension GameScene: SKPhysicsContactDelegate {
         }
         
         
-        print(firstBody.categoryBitMask)
-        print(secondBody.categoryBitMask)
+//        print(firstBody.categoryBitMask)
+//        print(secondBody.categoryBitMask)
         
         // respond if we determine that a glider and the falcon made contact
         if ((firstBody.categoryBitMask & PhysicsCategory.glider == firstBody.categoryBitMask) &&

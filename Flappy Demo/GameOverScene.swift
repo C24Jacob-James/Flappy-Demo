@@ -10,7 +10,7 @@ import SpriteKit
 
 class GameOverScene: SKScene {
     
-    var score = 0
+    var score = 69
     
     override func didMove(to view: SKView){
 //        //backgroundColor = .white // Or any appropriate background color
@@ -53,6 +53,7 @@ class GameOverScene: SKScene {
 //
 //        // Run the action
 //        bigFalcon.run(repeatBounce)
+        
         
         
         let gameOverWindow = SKSpriteNode(color:. white, size: CGSize(width: 300, height: 200))
