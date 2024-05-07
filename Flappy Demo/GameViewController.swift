@@ -37,28 +37,25 @@ class LoadingScene: SKScene {
         backgroundColor.scale(to: frame.size) // Scale the image to fit the frame
         addChild(backgroundColor)
         
-        let falconSprite = SKSpriteNode(imageNamed: "falcon")
+        let falconSprite = SKSpriteNode(imageNamed: "Falcon 1")
         falconSprite.position = CGPoint(x: frame.midX, y: frame.midY)
-        falconSprite.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
+        //falconSprite.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
+        falconSprite.size = CGSize(width: size.width * 0.12, height: size.width * 0.14)
 
         // Create a squiggly flight path
         let flightPath = UIBezierPath()
         flightPath.move(to: CGPoint(x: frame.minX, y: frame.midY))
 
-        // Define points for a squiggly line
-        let numberOfSquiggles = 5
-        let squiggleWidth = frame.width / CGFloat(numberOfSquiggles)
-        var currentX = frame.minX
-                
-        for i in 0..<numberOfSquiggles {
-            let nextX = currentX + squiggleWidth
-            let controlPoint1Y = frame.midY + (i % 2 == 0 ? -50 : 50)  // Alternate bump directions
-            let controlPoint2Y = frame.midY + (i % 2 == 0 ? 50 : -50)
-            flightPath.addCurve(to: CGPoint(x: nextX, y: frame.midY),
-                        controlPoint1: CGPoint(x: currentX + squiggleWidth / 2, y: controlPoint1Y),
-                        controlPoint2: CGPoint(x: currentX + squiggleWidth / 2, y: controlPoint2Y))
-            currentX = nextX
+        // Define the frequency and amplitude of the cosine-like curve
+        let frequency: CGFloat = 0.03 // Adjust this value to change the frequency of the curve
+        let amplitude: CGFloat = 50 // Adjust this value to change the amplitude of the curve
+
+        // Calculate the path points using the cosine function
+        for x in stride(from: frame.minX, through: frame.maxX, by: 10) {
+            let y = frame.midY + amplitude * cos(frequency * x)
+            flightPath.addLine(to: CGPoint(x: x, y: y))
         }
+
 
         // Falcon follows the path
         let followPath = SKAction.follow(flightPath.cgPath, asOffset: false, orientToPath: false, speed: 200)

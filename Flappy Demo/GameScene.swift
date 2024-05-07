@@ -65,7 +65,7 @@ class GameScene: SKScene {
     var gameReadyToStart = false
     
     //create the falcon node
-    let falcon = SKSpriteNode(imageNamed: "falcon")
+    let falcon = SKSpriteNode(imageNamed: "Falcon 1")
     
     // create the background nodes
     var background1: SKSpriteNode!
@@ -232,7 +232,7 @@ class GameScene: SKScene {
         // center falcon in Y-axis
         falcon.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
         falcon.zPosition = 2
-        falcon.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
+        falcon.size = CGSize(width: size.width * 0.12, height: size.width * 0.14)
         //        falcon.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
         falcon.physicsBody = SKPhysicsBody(circleOfRadius: falcon.size.width / 4)
         falcon.physicsBody?.isDynamic = false
@@ -306,7 +306,7 @@ class GameScene: SKScene {
     func addGlider() {
         
         // Create sprite for the glider
-        let glider = SKSpriteNode(imageNamed: "glider")
+        let glider = SKSpriteNode(imageNamed: "glider 1")
         
         
         // change size of glider
