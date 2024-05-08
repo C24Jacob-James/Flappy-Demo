@@ -62,6 +62,9 @@ class GameScene: SKScene {
         static let t53       : UInt32   = 0b1000
     }
     
+    // set to true to show the plane hitboxes (Used for debugging)
+    var showHitBoxes = true
+    
     var gameReadyToStart = false
     
     //create the falcon node
@@ -166,6 +169,8 @@ class GameScene: SKScene {
                     cloud.run(moveOut)
                 }
             }
+        
+        
         // Ensure all actions complete before starting game activities
             run(SKAction.wait(forDuration: duration)) {
                 self.gameReadyToStart = true
@@ -228,21 +233,6 @@ class GameScene: SKScene {
         addChild(timerLabel) // Add the main label to the scene
     }
     
-    func createfalcon() {
-        // center falcon in Y-axis
-        falcon.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
-        falcon.zPosition = 2
-        falcon.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
-        //        falcon.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
-        falcon.physicsBody = SKPhysicsBody(circleOfRadius: falcon.size.width / 4)
-        falcon.physicsBody?.isDynamic = false
-        // belongs to the "falcon category"
-        falcon.physicsBody?.categoryBitMask = PhysicsCategory.falcon
-        falcon.physicsBody?.contactTestBitMask = PhysicsCategory.falcon
-        
-        // add falcon to the scene
-        addChild(falcon)
-    }
         
     func createBackground() -> SKSpriteNode {
         let bg = SKSpriteNode(imageNamed: "mountains") // Replace with your actual image
@@ -283,8 +273,37 @@ class GameScene: SKScene {
         return random() * (max - min) + min
     }
     
+    func createfalcon() {
+        
+        let physicsSize = size.width / 8
+        
+        // center falcon in Y-axis
+        falcon.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
+        falcon.zPosition = 2
+        falcon.size = CGSize(width: size.width * 0.3, height: size.width * 0.4)
+        falcon.physicsBody = SKPhysicsBody(circleOfRadius: physicsSize)
+        falcon.physicsBody?.isDynamic = false
+        // belongs to the "falcon category"
+        falcon.physicsBody?.categoryBitMask = PhysicsCategory.falcon
+        falcon.physicsBody?.contactTestBitMask = PhysicsCategory.t53
+        
+        // Show the hitboxes
+        if(showHitBoxes){
+            let debugShape = SKShapeNode(circleOfRadius: physicsSize)
+            debugShape.strokeColor = SKColor.red
+            debugShape.lineWidth = 5.0
+            debugShape.zPosition = 1 // Ensure it does not cover the sprite visually
+            falcon.addChild(debugShape)
+        }
+        
+        // add falcon to the scene
+        addChild(falcon)
+    }
+    
     func spawnRandomPlane() {
-        let randomPlane = Int(random(min: 1, max: 4))
+//        let randomPlane = Int(random(min: 1, max: 3))
+        let randomPlane = 2
+
         
         if randomPlane == 1{
             addGlider()
@@ -298,9 +317,6 @@ class GameScene: SKScene {
             addT53()
 //            print("t53")
         }
-        else {
-//            print("shark")
-        }
     }
     
     func addGlider() {
@@ -308,10 +324,10 @@ class GameScene: SKScene {
         // Create sprite for the glider
         let glider = SKSpriteNode(imageNamed: "glider")
         
+        let physicsSize = CGSize(width: glider.size.width * 0.25, height: glider.size.height * 0.25)
         
         // change size of glider
-        glider.size.width = glider.size.width * 0.25
-        glider.size.height  = glider.size.height * 0.25
+        glider.size = physicsSize
         
         // add physics simulation to the glider node
         glider.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: glider.size.width * 0.4, height: glider.size.height * 0.1))
@@ -340,6 +356,14 @@ class GameScene: SKScene {
         
         // Add the glider to the scene
         addChild(glider)
+        
+        if(showHitBoxes){
+            let debugShape = SKShapeNode(rectOf: CGSize(width: glider.size.width * 0.4, height: glider.size.height * 0.1))
+            debugShape.strokeColor = SKColor.red
+            debugShape.lineWidth = 5.0
+            debugShape.zPosition = 1 // Ensure it does not cover the sprite visually
+            glider.addChild(debugShape)
+        }
         
         
         // Create the actions...
@@ -374,14 +398,14 @@ class GameScene: SKScene {
         // Create sprite for the glider
         let twotter = SKSpriteNode(imageNamed: "Twotter")
         
+        let physicsSize = CGSize(width: size.width * 0.3, height: size.height * 0.1)
         
         // change size of plane
-        let twotterScale = (size.width * 0.4) / twotter.size.width
-        twotter.setScale(twotterScale)
+        twotter.size = CGSize(width: size.width * 0.4, height: size.height * 0.35)
         
         // add physics simulation to the twotter node
-        twotter.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: twotter.xScale, height: twotter.yScale))
-        
+        twotter.physicsBody = SKPhysicsBody(rectangleOf: physicsSize)
+
         // Affected by gravity, friction, collisions, etc..
         twotter.physicsBody?.isDynamic = true
         
@@ -407,6 +431,14 @@ class GameScene: SKScene {
         // Add the twotter to the scene
         addChild(twotter)
         
+        // Show the hitboxes
+        if(showHitBoxes){
+            let debugShape = SKShapeNode(rectOf: physicsSize)
+            debugShape.strokeColor = SKColor.red
+            debugShape.lineWidth = 5.0
+            debugShape.zPosition = 1 // Ensure it does not cover the sprite visually
+            twotter.addChild(debugShape)
+        }
         
         // Create the actions...
         
@@ -435,7 +467,7 @@ class GameScene: SKScene {
         // ok, set this new twotter node in motion with all of the actions we dfined above
         twotter.run(SKAction.sequence([actionMove,checkPass,actionMoveDone]))
     }
-    
+
     func addT53(){
         
         // Create sprite for the t53
@@ -446,8 +478,10 @@ class GameScene: SKScene {
         let t53Scale = (size.width * 0.4) / t53.size.width
         t53.setScale(t53Scale)
         
+        let physicsSize = CGSize(width: t53.size.width, height: t53.size.height)
+        
         // add physics simulation to the twotter node
-        t53.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: t53.xScale, height: t53.yScale))
+        t53.physicsBody = SKPhysicsBody(rectangleOf: physicsSize)
         
         // Affected by gravity, friction, collisions, etc..
         t53.physicsBody?.isDynamic = true
@@ -455,11 +489,11 @@ class GameScene: SKScene {
         // belongs to the "t53 category"
         t53.physicsBody?.categoryBitMask = PhysicsCategory.t53
         
-        // Here, we're interested in whether the rocker makes contact with a rock, the falcon, and the earth
+        // Here, we're interested in whether the rocker makes contact with the falcon
         t53.physicsBody?.contactTestBitMask = PhysicsCategory.falcon
         
         
-        // define which categories of physics bodies can collide with a twotter
+        // define which categories of physics bodies can collide with a t53
         t53.physicsBody?.collisionBitMask = PhysicsCategory.none
         
         
@@ -474,6 +508,14 @@ class GameScene: SKScene {
         // Add the twotter to the scene
         addChild(t53)
         
+        // Show the hitboxes
+        if(showHitBoxes){
+            let debugShape = SKShapeNode(rectOf: physicsSize)
+            debugShape.strokeColor = SKColor.red
+            debugShape.lineWidth = 5.0
+            debugShape.zPosition = 1 // Ensure it does not cover the sprite visually
+            t53.addChild(debugShape)
+        }
         
         // Create the actions...
         
@@ -710,38 +752,20 @@ class GameScene: SKScene {
     
     // Here, we respond to a collision between glider and falcon.
     func gliderDidCollideWithfalcon(glider: SKSpriteNode, falcon: SKSpriteNode) {
-//        print("Hit glider")
-        glider.removeFromParent()
-        
         let reveal = SKTransition.crossFade(withDuration: 3)
-        //let gameOverScene = GameOverScene(size: self.size)
-        //view?.presentScene(gameOverScene, transition: reveal)
         handleGameOver()
-        
     }
     
     // Here, we respond to a collision between the twotter and falcon.
     func twotterDidCollideWithfalcon(twotter: SKSpriteNode, falcon: SKSpriteNode) {
-//        print("Hit twotter")
-        twotter.removeFromParent()
-        
         let reveal = SKTransition.crossFade(withDuration: 3)
-        //let gameOverScene = GameOverScene(size: self.size)
-        //view?.presentScene(gameOverScene, transition: reveal)
         handleGameOver()
-        
     }
     
     // Here, we respond to a collision between the t53 and falcon.
     func t53DidCollideWithfalcon(t53: SKSpriteNode, falcon: SKSpriteNode) {
-//        print("Hit t53")
-        t53.removeFromParent()
-        
         let reveal = SKTransition.crossFade(withDuration: 3)
-        //let gameOverScene = GameOverScene(size: self.size)
-        //view?.presentScene(gameOverScene, transition: reveal)
         handleGameOver()
-        
     }
     
     
@@ -763,8 +787,8 @@ extension GameScene: SKPhysicsContactDelegate {
         }
         
         
-//        print(firstBody.categoryBitMask)
-//        print(secondBody.categoryBitMask)
+        print(firstBody.categoryBitMask)
+        print(secondBody.categoryBitMask)
         
         // respond if we determine that a glider and the falcon made contact
         if ((firstBody.categoryBitMask & PhysicsCategory.glider == firstBody.categoryBitMask) &&
@@ -788,8 +812,8 @@ extension GameScene: SKPhysicsContactDelegate {
         }
         
         // respond if we determine that the t53 and the falcon made contact
-        if ((firstBody.categoryBitMask & PhysicsCategory.t53 == firstBody.categoryBitMask) &&
-            (secondBody.categoryBitMask & PhysicsCategory.falcon == secondBody.categoryBitMask)) {
+        if ((firstBody.categoryBitMask & PhysicsCategory.falcon == firstBody.categoryBitMask) &&
+            (secondBody.categoryBitMask & PhysicsCategory.t53 == secondBody.categoryBitMask)) {
             
             if let t53 = firstBody.node as? SKSpriteNode,
                let falcon = secondBody.node as? SKSpriteNode {
