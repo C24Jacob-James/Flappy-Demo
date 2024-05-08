@@ -322,7 +322,7 @@ class GameScene: SKScene {
     func addGlider() {
         
         // Create sprite for the glider
-        let glider = SKSpriteNode(imageNamed: "glider")
+        let glider = SKSpriteNode(imageNamed: "glider 1")
         
         let physicsSize = CGSize(width: glider.size.width * 0.25, height: glider.size.height * 0.25)
         

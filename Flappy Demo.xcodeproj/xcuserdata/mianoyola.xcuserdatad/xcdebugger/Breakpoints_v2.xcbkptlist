@@ -68,5 +68,53 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0C932617-80BF-4670-8BA6-BB5DE5E4C87F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Flappy Demo/GameScene.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "startGame()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0C932617-80BF-4670-8BA6-BB5DE5E4C87F - 24933d3af481e9e9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Flappy_Demo.GameScene.didMove(to: __C.SKView) -&gt; ()"
+                  moduleName = "Flappy Demo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mianoyola/Library/CloudStorage/OneDrive-afacademy.af.edu/Documents/ACADEMICS/C1C/SPRING/MOBILE%20DEV/Flappy-Demo/Flappy%20Demo/GameScene.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "149"
+                  endingLineNumber = "149"
+                  offsetFromSymbolStart = "2000">
+               </Location>
+               <Location
+                  uuid = "0C932617-80BF-4670-8BA6-BB5DE5E4C87F - 37fb022aa7768b39"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Flappy_Demo.GameScene.startGame() -&gt; ()"
+                  moduleName = "Flappy Demo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mianoyola/Library/CloudStorage/OneDrive-afacademy.af.edu/Documents/ACADEMICS/C1C/SPRING/MOBILE%20DEV/Flappy-Demo/Flappy%20Demo/GameScene.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "150"
+                  endingLineNumber = "150"
+                  offsetFromSymbolStart = "32">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
